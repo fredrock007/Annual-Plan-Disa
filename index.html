@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DISA Primary — Weekly Lesson Plan (Term 1) — Coding &amp; Robotics</title>
+  <title>DISA Primary — Weekly Lesson Plan (Term 1)</title>
 
   <!-- ExcelJS for .xlsx generation (merged-cells + styling + image support) -->
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
@@ -64,7 +64,7 @@
     <button type="button" onclick="downloadXLSXGrade('Grade 6')">Download XLSX — Grade 6</button>
     <button type="button" onclick="downloadXLSXGrade('Grade 7')">Download XLSX — Grade 7</button>
 
-    <span class="hint">Clean PDF: in the print dialog, switch OFF “Headers and footers”.</span>
+    <span class="hint">Clean PDF: in the print dialog, switch OFF "Headers and footers".</span>
   </div>
 
   <div class="doc" id="doc"></div>
@@ -73,24 +73,38 @@
     // -------------------------
     // CONFIG
     // -------------------------
-    const SUBJECT = 'Coding & Robotics';
     const TERM_LABEL = 'Term 1';
     const TEACHER = 'Mr Samuels';
 
-    // Fred: You told me this is the filename. A DOCX cannot be rendered as an <img>.
-    // Expected behavior question:
-    //  - Do you want the logo to actually appear? If yes, export the logo to PNG/JPG and change LOGO_FILE.
-    //  - If you keep the DOCX, the page will show the "logo skipped" note but will not crash.
     // Logo file placed in the same folder as this page in your GitHub Pages repo
-    // (e.g., repo root). Must be an image (png/jpg).
+    // Must be an image (png/jpg).
     const LOGO_FILE = 'disa-logo.png';
 
     // -------------------------
-    // DATA: Touch Typing is a major strand (every week)
+    // TERM DATES + PUBLIC HOLIDAYS (South Africa)
     // Term 1: Wed 14 Jan 2026 – Fri 10 Apr 2026
-    // SA Public holidays impacting school days:
     // - Good Friday: Fri 3 Apr
     // - Family Day: Mon 6 Apr
+    // -------------------------
+
+    const WEEKS = [
+      { w:1,  dates:'14–16 January (Wed–Fri)' },
+      { w:2,  dates:'19–23 January' },
+      { w:3,  dates:'26–30 January' },
+      { w:4,  dates:'2–6 February' },
+      { w:5,  dates:'9–13 February' },
+      { w:6,  dates:'16–20 February' },
+      { w:7,  dates:'23–27 February' },
+      { w:8,  dates:'2–6 March' },
+      { w:9,  dates:'9–13 March' },
+      { w:10, dates:'16–20 March' },
+      { w:11, dates:'23–27 March' },
+      { w:12, dates:'30 March–3 April (Good Friday: Fri 3 Apr)', holiday:'Good Friday (Fri 3 April) – no school' },
+      { w:13, dates:'6–10 April (Family Day: Mon 6 Apr)', holiday:'Family Day (Mon 6 April) – no school' }
+    ];
+
+    // -------------------------
+    // TOUCH TYPING (major component)
     // -------------------------
 
     const TT = {
@@ -117,22 +131,6 @@
       ]
     };
 
-    const WEEKS = [
-      { w:1,  dates:'14–16 January (Wed–Fri)' },
-      { w:2,  dates:'19–23 January' },
-      { w:3,  dates:'26–30 January' },
-      { w:4,  dates:'2–6 February' },
-      { w:5,  dates:'9–13 February' },
-      { w:6,  dates:'16–20 February' },
-      { w:7,  dates:'23–27 February' },
-      { w:8,  dates:'2–6 March' },
-      { w:9,  dates:'9–13 March' },
-      { w:10, dates:'16–20 March' },
-      { w:11, dates:'23–27 March' },
-      { w:12, dates:'30 March–3 April (Good Friday: Fri 3 Apr)', holiday:'Good Friday (Fri 3 April) – no school' },
-      { w:13, dates:'6–10 April (Family Day: Mon 6 Apr)', holiday:'Family Day (Mon 6 April) – no school' }
-    ];
-
     function typingFocus(week, gradeKey){
       const arr = TT[gradeKey];
       const idx = Math.min(arr.length - 1, Math.floor((week - 1) / 3));
@@ -146,7 +144,13 @@
         : 'Touch Typing Focus: ' + focus + ' (baseline/target + technique)';
     }
 
-    // Grade 5 (2 x 60 mins)
+    function checkShort(){ return 'Exit ticket: evidence (screenshot/link) + 1 sentence reflection.'; }
+    function checkLong(){ return 'Checklist: login, file naming, typing accuracy, task completion.'; }
+
+    // -------------------------
+    // GRADE 5 (2 × 60 mins/week)
+    // -------------------------
+
     function g5L1(week){
       if(week===1) return 'Windows login routine + file naming + touch typing: posture + home row accuracy drills.';
       if(week<=4) return 'Typing warm-up + application skills: basic formatting + save work neatly (evidence in folder).';
@@ -166,7 +170,10 @@
       return 'Typing final check + end-of-term showcase + reflection.';
     }
 
-    // Grade 6 (2 x 60 mins)
+    // -------------------------
+    // GRADE 6 (2 × 60 mins/week)
+    // -------------------------
+
     function g6L1(week){
       if(week===1) return 'Windows login mastery + typing baseline + rules for appropriate online use.';
       if(week<=3) return 'Typing warm-up + spreadsheets: data entry, formatting, clean table.';
@@ -186,38 +193,78 @@
       return 'Typing final + reflection + Term 2 preview.';
     }
 
-    // Grade 7 (2 x 30 mins)
-    function g7L1(week){
-      if(week===1) return 'Portfolio folders + typing baseline (WPM + accuracy) + symbols needed for coding.';
-      if(week<=2) return 'Typing warm-up + HTML structure refresh (tags, links, images) for neat page output.';
-      if(week<=3) return 'Typing warm-up + logic: flow diagrams + intro truth tables.';
-      if(week<=5) return 'Typing warm-up + Python: operators + IF / ELSE decision structures.';
-      if(week<=8) return 'Typing warm-up + robotics: sensors + outputs; threshold logic + testing.';
-      if(week<=10) return 'Typing warm-up + mini PAT: coding mini-game or sensor alarm (evidence + rubric).';
-      return 'Typing warm-up + catch-up and revision + strengthen weak concepts.';
-    }
-    function g7L2(week){
-      if(week===1) return 'Typing targets + digital citizenship recap + file management routines.';
-      if(week<=2) return 'Typing paragraphs + CSS basics (classes, text formatting) for clean web pages.';
-      if(week<=3) return 'Typing + truth tables (AND/OR/NOT) + short quiz.';
-      if(week<=5) return 'Typing + Python drills: IF + boolean operators; tiny decision program.';
-      if(week<=8) return 'Typing + sensor project extension: second output or improved logic.';
-      if(week<=10) return 'Typing + mini PAT finalise + short test (operators, IF, safety).';
-      return 'Typing final + showcase + reflection (short lessons, tight evidence).';
+    // -------------------------
+    // GRADE 7 (2 × 30 mins/week)
+    // Blended strands: 35% Technology + 65% Coding & Robotics
+    // -------------------------
+
+    function g7TechLesson(week){
+      if(week===1) return 'TECH (35% strand): Introduce systems thinking + safety. Explore simple mechanisms: levers (1st/2nd/3rd class) using classroom objects. Quick sketch of each lever in books.';
+      if(week===2) return 'TECH (35% strand): Linkages + mechanical advantage (qualitative). Investigate everyday linkages (stapler, scissors, tongs). Short comparison: force in vs force out.';
+      if(week===3) return 'TECH (35% strand): Hydraulics vs pneumatics. Mini practical: syringe + tubing demo (air vs water). Record observations; connect to force transfer.';
+      if(week===4) return 'TECH (35% strand): Design brief for an Automated Safety System. Define specs + constraints; choose materials; plan mechanism + control.';
+      if(week===5) return 'TECH (35% strand): Working drawings: quick 2D with dimensions; basic isometric sketch. Teacher models on Clevertouch; learners submit sketches.';
+      if(week===6) return 'TECH (35% strand): Build phase 1: construct frame + lever/linkage (cardboard/wood/skewers) under safe tool rules. Test movement.';
+      if(week===7) return 'TECH (35% strand): Build phase 2: add hydraulic/pneumatic actuation (syringes + tubing) OR controlled barrier mechanism. Iterate for strength + control.';
+      if(week===8) return 'TECH (35% strand): Evaluate + improve: compare designs, list pros/cons, stability, usability. Add one improvement and justify it.';
+      if(week===9) return 'TECH (35% strand): Communicate: team presentation + labelled drawings; demonstrate model; short reflection on safety technologies.';
+      return 'TECH (integration only): 5-minute mechanism recap linked to current C&R task (sensors/robot motion).';
     }
 
-    function checkShort(){ return 'Exit ticket: evidence (screenshot/link) + 1 sentence reflection.'; }
-    function checkLong(){ return 'Checklist: login, file naming, typing accuracy, task completion.'; }
+    function g7CRLesson(week){
+      if(week===1) return 'C&R (65% strand): Portfolio folders + typing baseline (WPM + accuracy) + symbols for coding ((), {}, [], :, ;). Short drill: type a bracket-heavy line correctly.';
+      if(week===2) return 'C&R (65% strand): Application skill: clean document formatting (headings, bullets). Produce a 1-page Lab Rules + Safety sheet. Save PDF to portfolio.';
+      if(week===3) return 'C&R (65% strand): Algorithms: flowchart basics + pseudocode. Create an algorithm for safe system start-up checklist.';
+      if(week===4) return 'C&R (65% strand): Micro:bit / MakeCode: output (LED/buzzer) + variables. Build a warning signal pattern and save the share link.';
+      if(week===5) return 'C&R (65% strand): Sensors: micro:bit input (light/temperature/buttons) or Spike sensor. Create threshold logic (if/else).';
+      if(week===6) return 'C&R (65% strand): Robotics control: Spike or Sphero — movement + timing. Challenge: move to a target and stop accurately.';
+      if(week===7) return 'C&R (65% strand): Combine: sensor → decision → action. Build a simple safety behaviour (alarm/light/barrier trigger).';
+      if(week===8) return 'C&R (65% strand): Mini PAT build: Automated Safety System logic + evidence capture (photos/video/share links).';
+      if(week===9) return 'C&R (65% strand): Mini PAT continue: testing checklist + improve reliability. Capture evidence.';
+      if(week===10) return 'C&R (65% strand): Mini PAT finalise + short theory quiz (algorithms, IF, safety, sensors).';
+      if(week===11) return 'C&R (65% strand): Extension: 3D design a simple part (housing/bracket) OR refine code readability + comments.';
+      if(week===12) return 'C&R (65% strand): Public Holiday week: consolidate evidence; catch-up; optional typing speed test.';
+      return 'C&R (65% strand): Final showcase + reflection: what improved (typing, design thinking, coding, robotics).';
+    }
+
+    function g7L1(week){
+      const tt = 'Typing warm-up (3–5 min): ' + typingFocus(week,'g7') + '.';
+      return tt + ' ' + g7TechLesson(week);
+    }
+    function g7L2(week){
+      const tt = 'Typing warm-up (3–5 min): ' + typingFocus(week,'g7') + '.';
+      return tt + ' ' + g7CRLesson(week);
+    }
+
+    // -------------------------
+    // RESOURCES
+    // -------------------------
 
     function resourcesCommon(){
       return 'PC lab, projector, typing tool, Scratch/MakeCode/Python as needed, worksheets, rubrics.';
+    }
+
+    function resourcesGrade7(){
+      return [
+        'Clevertouch interactive whiteboard (2 pens)',
+        'Laptops (Windows), iPads',
+        'Sphero BOLT (15+)',
+        'LEGO Spike Education (4)',
+        'micro:bit (20) + portable batteries (15)',
+        '3D printers: Creality Hi + Ender-3 V3',
+        'Small whiteboards (30)',
+        'Technology materials (as per CAPS) + robotics consumables (school budget ±R80k)'
+      ].join('; ');
     }
 
     function homeworkBase(mins){
       return mins + ' min typing practice + finish any incomplete class task.';
     }
 
-    // Safe HTML escape WITHOUT regex literals (robust against copy/paste corruption)
+    // -------------------------
+    // SAFE HTML ESCAPE
+    // -------------------------
+
     function escapeToHTML(s){
       const t = String(s == null ? '' : s);
       return t
@@ -226,36 +273,75 @@
         .split('>').join('&gt;')
         .split('"').join('&quot;')
         .split("'").join('&#39;')
-        .split('\n').join('<br>');
+        .split('\\n').join('<br>');
     }
 
-    function buildGrade(grade, timetable, gradeKey, capsTopic, l1Fn, l2Fn, hwMins){
+    // -------------------------
+    // GRADE BUILDER
+    // -------------------------
+
+    function buildGrade(opts){
       return {
-        grade,
-        timetable,
-        gradeKey,
-        capsTopic,
+        grade: opts.grade,
+        timetable: opts.timetable,
+        gradeKey: opts.gradeKey,
+        subject: opts.subject,
+        capsTopic: opts.capsTopic,
+        lesson1Fn: opts.lesson1Fn,
+        lesson2Fn: opts.lesson2Fn,
+        resourcesFn: opts.resourcesFn,
+        hwMins: opts.hwMins,
         weeks: WEEKS.map(w => ({
           w: w.w,
           dates: w.dates,
           term: TERM_LABEL,
-          lesson1: { intro: typingIntro(w.w, gradeKey, false), activities: l1Fn(w.w), check: checkLong() },
-          lesson2: { intro: typingIntro(w.w, gradeKey, true),  activities: l2Fn(w.w), check: checkShort() },
+          lesson1: { intro: typingIntro(w.w, opts.gradeKey, false), activities: opts.lesson1Fn(w.w), check: checkLong() },
+          lesson2: { intro: typingIntro(w.w, opts.gradeKey, true),  activities: opts.lesson2Fn(w.w), check: checkShort() },
           integration: w.holiday ? 'Public Holiday: ' + w.holiday : 'Integration: language (instructions), maths (logic), digital citizenship, relevant subjects.',
-          resources: resourcesCommon(),
-          homework: w.holiday ? homeworkBase(hwMins) + ' (Note: ' + w.holiday + ')' : homeworkBase(hwMins)
+          resources: opts.resourcesFn(w.w),
+          homework: w.holiday ? homeworkBase(opts.hwMins) + ' (Note: ' + w.holiday + ')' : homeworkBase(opts.hwMins)
         }))
       };
     }
 
     const GRADES = [
-      buildGrade('Grade 5','2 × 60-minute lessons per week','g5','Touch Typing (core) + Digital Foundations / Application Skills / Scratch / Robotics', g5L1, g5L2, '5–10'),
-      buildGrade('Grade 6','2 × 60-minute lessons per week','g6','Touch Typing (core) + E-communication / Spreadsheets / CAD / Scratch / Robotics', g6L1, g6L2, '10'),
-      buildGrade('Grade 7','2 × 30-minute lessons per week','g7','Touch Typing (core) + HTML/CSS / Logic / Python / Robotics', g7L1, g7L2, '5–10')
+      buildGrade({
+        grade: 'Grade 5',
+        timetable: '2 × 60-minute lessons per week',
+        gradeKey: 'g5',
+        subject: 'Coding & Robotics',
+        capsTopic: 'Touch Typing (core) + Digital Foundations / Application Skills / Scratch / Robotics',
+        lesson1Fn: g5L1,
+        lesson2Fn: g5L2,
+        resourcesFn: () => resourcesCommon(),
+        hwMins: '5–10'
+      }),
+      buildGrade({
+        grade: 'Grade 6',
+        timetable: '2 × 60-minute lessons per week',
+        gradeKey: 'g6',
+        subject: 'Coding & Robotics',
+        capsTopic: 'Touch Typing (core) + E-communication / Spreadsheets / CAD / Scratch / Robotics',
+        lesson1Fn: g6L1,
+        lesson2Fn: g6L2,
+        resourcesFn: () => resourcesCommon(),
+        hwMins: '10'
+      }),
+      buildGrade({
+        grade: 'Grade 7',
+        timetable: '2 × 30-minute lessons per week',
+        gradeKey: 'g7',
+        subject: 'Coding, Robotics & Technology',
+        capsTopic: 'Touch Typing (major) + 35% Technology (Mechanical Systems & Control) + 65% Coding & Robotics',
+        lesson1Fn: g7L1,
+        lesson2Fn: g7L2,
+        resourcesFn: () => resourcesGrade7(),
+        hwMins: '5–10'
+      })
     ];
 
     // -------------------------
-    // RENDER (DOM-built to avoid innerHTML quoting bugs)
+    // RENDER (DOM-built)
     // -------------------------
 
     function el(tag, className, text){
@@ -284,7 +370,6 @@
     }
 
     function setHTML(cell, html){
-      // html comes from escapeToHTML, so safe
       cell.innerHTML = html;
     }
 
@@ -306,14 +391,14 @@
         schoolLine.classList.add('logo-missing');
         img.style.display = 'none';
       };
-      const note = el('div','logo-note','(Logo skipped: export to PNG/JPG and update LOGO_FILE)');
+      const note = el('div','logo-note','(Logo missing: ensure disa-logo.png is in the same folder as index.html)');
       schoolLine.appendChild(img);
       schoolLine.appendChild(el('div',null,'DISA PRIMARY SCHOOL'));
       schoolLine.appendChild(note);
       mid.appendChild(schoolLine);
 
       tr.appendChild(mid);
-      tr.appendChild(td(4,'top-right','SUBJECT:'));
+      tr.appendChild(td(4,'top-right','SUBJECT: ' + grade.subject));
       tbl.appendChild(tr);
 
       // Row 2 (green headings)
@@ -381,8 +466,7 @@
 
       // Row 8 Check for understanding
       tr = document.createElement('tr');
-      const chkLabel = td(1,'left-label','Check for\nunderstanding');
-      tr.appendChild(chkLabel);
+      tr.appendChild(td(1,'left-label','Check for\nunderstanding'));
       const chk1 = td(5); setHTML(chk1, escapeToHTML(week.lesson1.check));
       const chk2 = td(7); setHTML(chk2, escapeToHTML(week.lesson2.check));
       tr.appendChild(chk1);
@@ -391,24 +475,21 @@
 
       // Row 9 Integration
       tr = document.createElement('tr');
-      const integLabel = td(2,'left-label','INTEGRATION');
-      tr.appendChild(integLabel);
+      tr.appendChild(td(2,'left-label','INTEGRATION'));
       const integ = td(12); setHTML(integ, escapeToHTML(week.integration));
       tr.appendChild(integ);
       tbl.appendChild(tr);
 
       // Row 10 Resources
       tr = document.createElement('tr');
-      const resLabel = td(2,'left-label','RESOURCES');
-      tr.appendChild(resLabel);
+      tr.appendChild(td(2,'left-label','RESOURCES'));
       const res = td(12); setHTML(res, escapeToHTML(week.resources));
       tr.appendChild(res);
       tbl.appendChild(tr);
 
       // Row 11 Homework
       tr = document.createElement('tr');
-      const hwLabel = td(2,'left-label','HOMEWORK');
-      tr.appendChild(hwLabel);
+      tr.appendChild(td(2,'left-label','HOMEWORK'));
       const hw = td(12); setHTML(hw, escapeToHTML(week.homework));
       tr.appendChild(hw);
       tbl.appendChild(tr);
@@ -476,14 +557,14 @@
     }
 
     // -------------------------
-    // XLSX EXPORT (Option A): workbook per grade, sheet per week
+    // XLSX EXPORT (workbook per grade, sheet per week)
     // -------------------------
 
     function getLogoExtension(){
       const f = String(LOGO_FILE || '').toLowerCase().trim();
       if(f.endsWith('.png')) return 'png';
       if(f.endsWith('.jpg') || f.endsWith('.jpeg')) return 'jpeg';
-      return null; // DOCX not supported as image
+      return null;
     }
 
     async function fetchLogoArrayBuffer(){
@@ -523,7 +604,7 @@
         'C7:G7','H7:N7',
         'C8:G8','H8:N8',
         'A9:B9','C9:N9',
-        'A10:B10','C10:G10','H10:N10',
+        'A10:B10','C10:N10',
         'A11:B11','C11:N11'
       ];
       for(const m of merges){ ws.mergeCells(m); }
@@ -624,7 +705,7 @@
 
         writeTemplate(ws);
 
-        ws.getCell('K1').value = 'SUBJECT: ' + SUBJECT;
+        ws.getCell('K1').value = 'SUBJECT: ' + grade.subject;
 
         ws.getCell('A3').value = TERM_LABEL;
         ws.getCell('C3').value = 'Week ' + week.w;
@@ -680,26 +761,33 @@
     }
 
     // -------------------------
-    // TESTS (more coverage)
+    // TESTS
     // -------------------------
 
     function runTests(){
-      const t1 = escapeToHTML('a\nb');
+      const t1 = escapeToHTML('a\\nb');
       console.assert(t1.indexOf('<br>') !== -1, 'escapeToHTML should convert newlines');
 
       const t2 = escapeToHTML('quote " test');
       console.assert(t2.indexOf('&quot;') !== -1, 'escapeToHTML should escape double quotes');
 
-      const t3 = escapeToHTML("x & y");
+      const t3 = escapeToHTML('x & y');
       console.assert(t3.indexOf('&amp;') !== -1, 'escapeToHTML should escape ampersands');
 
-      const t4 = escapeToHTML("<tag>");
+      const t4 = escapeToHTML('<tag>');
       console.assert(t4.indexOf('&lt;tag&gt;') !== -1, 'escapeToHTML should escape angle brackets');
 
       const t5 = escapeToHTML("O'Reilly");
       console.assert(t5.indexOf('&#39;') !== -1, 'escapeToHTML should escape apostrophes');
 
       console.assert(getLogoExtension() === 'png', 'PNG logo should be detected as png');
+
+      const g7 = GRADES.find(g => g.grade === 'Grade 7');
+      const techCount = g7.weeks.slice(0,9).filter(w => String(w.lesson1.activities).indexOf('TECH (35%') !== -1).length;
+      console.assert(techCount === 9, 'Grade 7 should schedule 9 Technology lessons (≈35%)');
+
+      // Extra: ensure no literal newlines exist inside JS strings in key places
+      console.assert(String(escapeToHTML).indexOf("split('\n')") !== -1, 'escapeToHTML should use \\n splitting');
     }
 
     // Initial render
