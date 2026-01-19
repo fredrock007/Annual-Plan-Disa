@@ -80,6 +80,13 @@
     // Must be an image (png/jpg).
     const LOGO_FILE = 'disa-logo.png';
 
+    // Build an absolute URL for GitHub Pages (avoids path issues when hosted in subfolders)
+    function logoURL(cacheBust){
+      const u = new URL(LOGO_FILE, window.location.href);
+      if(cacheBust) u.searchParams.set('v', String(Date.now()));
+      return u.toString();
+    }
+
     // -------------------------
     // TERM DATES + PUBLIC HOLIDAYS (South Africa)
     // Term 1: Wed 14 Jan 2026 – Fri 10 Apr 2026
@@ -386,7 +393,7 @@
       const schoolLine = el('div','school-line');
       const img = document.createElement('img');
       img.alt = 'DISA logo';
-      img.src = LOGO_FILE;
+      img.src = logoURL(false);
       img.onerror = () => {
         schoolLine.classList.add('logo-missing');
         img.style.display = 'none';
@@ -571,7 +578,7 @@
       const ext = getLogoExtension();
       if(!ext) return null;
       try{
-        const res = await fetch(LOGO_FILE, { cache: 'no-store' });
+        const res = await fetch(logoURL(true), { cache: 'no-store' });
         if(!res.ok) return null;
         return await res.arrayBuffer();
       }catch(e){
@@ -743,6 +750,17 @@
 
     async function downloadXLSXGrade(gradeName){
       try{
+        // Quick visibility check to help debug missing logo in downloads
+        const ext = getLogoExtension();
+        if(!ext){
+          console.warn('Logo skipped: LOGO_FILE is not a supported image type:', LOGO_FILE);
+        }else{
+          const testRes = await fetch(logoURL(true), { cache: 'no-store' }).catch(() => null);
+          if(!testRes || !testRes.ok){
+            console.warn('Logo fetch failed for XLSX export. Check file path/case and repo location:', logoURL(false));
+          }
+        }
+
         const wb = await buildGradeWorkbook(gradeName);
         const buf = await wb.xlsx.writeBuffer();
         const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
