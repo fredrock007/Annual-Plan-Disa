@@ -3,939 +3,954 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DISA Primary — Term Planning Overview — Coding & Robotics (Term 1)</title>
+  <title>DISA Primary — Weekly Lesson Plan — Coding & Robotics (Term 1)</title>
   <style>
     :root{
       --ink:#111;
-      --muted:#333;
       --line:#1d1d1d;
+      --green:#93c47d; /* close to template */
+      --grey:#d9d9d9;
       --paper:#fff;
     }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      padding:24px;
       font-family: Arial, Helvetica, sans-serif;
       color:var(--ink);
       background:var(--paper);
     }
-    .page{
-      max-width: 980px;
-      margin:0 auto;
-    }
-    .header{
-      text-align:left;
-      line-height:1.25;
-      margin-bottom:14px;
-    }
-    .header .school{font-weight:700; letter-spacing:.2px;}
-    .header .title{font-weight:700;}
-    .header .subject{font-weight:700;}
-    .header .teacher{font-weight:700;}
-    .header .grade{font-weight:700;}
-    .header .term{font-weight:700;}
 
-    .subhead{margin:10px 0 8px; font-weight:700;}
+    /* ===== Toolbar ===== */
+    .toolbar{
+      position:sticky; top:0; z-index:50;
+      background:#fff; border-bottom:1px solid #ccc;
+      padding:10px 12px;
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    }
+    .toolbar button{ padding:8px 10px; cursor:pointer; border:1px solid #bbb; background:#f7f7f7; border-radius:6px; }
+    .toolbar .hint{ font-size:12px; color:#555; }
 
-    table{
+    /* ===== Document ===== */
+    .doc{ max-width:1100px; margin:0 auto; padding:10px 12px 24px; }
+
+    /* One page = one week */
+    .page{ page-break-after: always; margin:0; }
+
+    /* Spreadsheet-like table */
+    table.plan{
       width:100%;
       border-collapse:collapse;
       table-layout:fixed;
       font-size:13px;
     }
-    th, td{
-      border:1.6px solid var(--line);
+    .plan td, .plan th{
+      border:1.4px solid var(--line);
       vertical-align:top;
       padding:8px;
-      word-wrap:break-word;
       white-space:pre-wrap;
-    }
-    th{
-      text-align:left;
-      font-weight:700;
+      word-wrap:break-word;
     }
 
-    .col-week{width:16%}
-    .col-content{width:44%}
-    .col-pages{width:16%}
-    .col-ict{width:12%}
-    .col-res{width:12%}
+    .top-left{ font-weight:700; font-size:16px; line-height:1.15; }
+    .top-center{ text-align:center; font-weight:700; font-size:20px; }
+    .top-right{ text-align:center; font-weight:700; font-size:18px; }
 
-    .block{margin:18px 0 26px;}
-    .gradeband{margin:10px 0 8px; font-weight:700;}
+    .green{ background:var(--green); color:#fff; font-weight:700; text-align:center; }
+    .section-head{ font-weight:700; text-align:center; }
+    .lesson-head{ font-weight:700; text-align:center; }
+    .grey{ background:var(--grey); font-weight:700; }
 
-    .content-title{font-weight:700;}
-    .muted{color:var(--muted);}
+    .side-vertical{ font-weight:700; text-align:center; }
 
-    /* Make it look like the Word template spacing */
-    .content p{margin:0 0 8px;}
-    .content .caps{font-weight:700;}
-    .content .label{font-weight:700;}
+    .logo-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .logo{ width:62px; height:auto; display:block; }
+    .school{ font-weight:700; }
+
+    .muted{ color:#444; font-weight:600; }
 
     @media print{
-      body{padding:0}
-      .page{max-width:none; margin:0;}
-      .block{page-break-inside:avoid;}
+      .toolbar{ display:none !important; }
+      .doc{ max-width:none; margin:0; padding:0; }
+      .page{ page-break-after:always; }
+      @page{ margin:10mm; }
+
+      /* Grade-only print */
+      body.print-grade-active .page{ display:none !important; }
+      body.print-grade-active .page.print-grade-show{ display:block !important; }
+
+      /* Browser header/footer (date/time/url/page#) is controlled in the print dialog.
+         Disable “Headers and footers” for a clean PDF. */
     }
   </style>
 </head>
 <body>
-  <div class="toolbar" style="position:sticky;top:0;background:#fff;border-bottom:1px solid #ccc;padding:8px 12px;display:flex;gap:8px;z-index:10">
-    <button onclick="window.print()" style="padding:6px 10px;">Print</button>
-    <button onclick="downloadPDF()" style="padding:6px 10px;">Download PDF</button>
+  <div class="toolbar">
+    <button type="button" onclick="window.print()">Print (All)</button>
+    <button type="button" onclick="downloadPDF()">Download PDF (All)</button>
+
+    <span style="width:12px"></span>
+
+    <button type="button" onclick="downloadPDFGrade('Grade 5')">PDF — Grade 5</button>
+    <button type="button" onclick="downloadPDFGrade('Grade 6')">PDF — Grade 6</button>
+    <button type="button" onclick="downloadPDFGrade('Grade 7')">PDF — Grade 7</button>
+
+    <span style="width:12px"></span>
+
+    <button type="button" onclick="downloadXLSXGrade('Grade 5')">XLSX — Grade 5</button>
+    <button type="button" onclick="downloadXLSXGrade('Grade 6')">XLSX — Grade 6</button>
+    <button type="button" onclick="downloadXLSXGrade('Grade 7')">XLSX — Grade 7</button>
+
+    <span class="hint">Tip: For a clean PDF, switch OFF “Headers and footers” in the print dialog. Logo loads from <b>logo.png</b> in your GitHub repo.</span>
   </div>
-  <div class="page">
 
-    <!-- ===== GRADE 5 ===== -->
-    <div class="header">
-      <div class="school">DISA PRIMARY SCHOOL</div>
-      <div class="title">Term Planning Overview</div>
-      <div class="subject">Coding & Robotics</div>
-      <div class="teacher">Mr Samuels</div>
-      <div class="grade">Grade 5</div>
-      <div class="muted"><b>Timetable:</b> 2 × 60-minute lessons per week</div>
-      <div class="term">Term 1, 2026</div>
-    </div>
+  <div class="doc" id="doc"></div>
 
-    <div class="subhead">Lesson planning:</div>
+  <!-- ExcelJS + FileSaver for styled XLSX (GitHub Pages-friendly) -->
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
-    <div class="block">
-      <table>
-        <thead>
-          <tr>
-            <th class="col-week">Week  and dates</th>
-            <th class="col-content">Content to be covered and subject integration</th>
-            <th class="col-pages">Textbook pages or Worksheets</th>
-            <th class="col-ict">ICT and links</th>
-            <th class="col-res">Resources used</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Week 1:
-14 - 16 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Digital Foundations (Windows login + typing) + Internet & E-communications</div>
-              <p><span class="label">Lesson:</span> Orientation + Digital Citizenship basics</p>
-              <p><span class="label">Lesson 1:</span> Windows OS login routine (username, password rules) + classroom device care.</p>
-              <p><span class="label">Lesson 2:</span> Typing posture + home-row (accuracy over speed).</p>
-              
-              <p class="muted"><span class="label">Skills:</span> Login, basic file naming, typing accuracy, safe online behaviour.</p>
-            </td>
-            <td>
-Typing warm-up sheet (home row)
-Password rules mini-worksheet</td>
-            <td>
-TypingClub / NitroType (offline alternative)
-School LMS / shared drive</td>
-            <td>
-Laptops/PC lab
-Whiteboard
-Workbooks</td>
-          </tr>
-
-          <tr>
-            <td>Week 2:
-19 - 23 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Application Skills — Presentations</div>
-              <p><span class="label">Lesson 1:</span> Presentation UI (slides, layouts). Create a 2-slide presentation.</p>
-              <p><span class="label">Lesson 2:</span> Formatting text (font, size, colour, alignment) + inserting simple shapes.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Introduce presentations + user interface + layout of slides. </p>
-            </td>
-            <td>
-Slides checklist (2 slides)
-Formatting practice sheet</td>
-            <td>
-PowerPoint / Google Slides
-Projector / Smartboard</td>
-            <td>
-Computers
-Smartboard
-Workbooks</td>
-          </tr>
-
-          <tr>
-            <td>Week 3:
-26 - 30 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics Skills (CAD) — Basic 2D drawing tools</div>
-              <p><span class="label">Lesson 1:</span> CAD interface + creating/saving drawings.</p>
-              <p><span class="label">Lesson 2:</span> Draw using Line / Circle / Rectangle tools.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Use Line, Circle, Rectangle tools; create and save drawings.</p>
-            </td>
-            <td>
-2D drawing worksheet pack
-CAD tool icons sheet</td>
-            <td>
-Tinkercad / FreeCAD (school choice)
-Offline screenshots</td>
-            <td>
-Computers
-Mouse
-Smartboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 4:
-2 - 6 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Algorithms & Coding — Operators + If/Then</div>
-              <p><span class="label">Lesson 1:</span> Block coding refresh (variables + inputs).</p>
-              <p><span class="label">Lesson 2:</span> Introduce operators (greater than / less than) and IF THEN control.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Introduce operators (greater/less) + IF THEN. </p>
-            </td>
-            <td>
-Scratch task sheet: Compare numbers
-Mini-rubric</td>
-            <td>
-Scratch (offline editor if needed)</td>
-            <td>
-Computers
-Whiteboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 5:
-9 - 13 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics Skills — Microcontroller foundations</div>
-              <p><span class="label">Lesson 1:</span> Input–Process–Output + identify devices.</p>
-              <p><span class="label">Lesson 2:</span> Introduce microcontroller layout + connecting components conceptually.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Introduce microcontroller, IPO, block-based programming, LED/buzzer outputs.</p>
-            </td>
-            <td>
-IPO worksheet
-Microcontroller diagram sheet</td>
-            <td>
-MakeCode / Tinkercad Circuits</td>
-            <td>
-Micro:bit/Arduino kits
-Breadboards
-LEDs/Buzzers</td>
-          </tr>
-
-          <tr>
-            <td>Week 6:
-16 - 20 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics Skills — Build + test outputs</div>
-              <p><span class="label">Lesson 1:</span> Program LED blink patterns (sequence + timing).</p>
-              <p><span class="label">Lesson 2:</span> Program buzzer pattern (alarm / melody basics).</p>
-              
-            </td>
-            <td>
-Coding & Circuit worksheet</td>
-            <td>
-MakeCode projects (saved links)
-Class shared folder</td>
-            <td>
-Kits
-Computers
-Smartboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 7:
-23 - 27 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Practical Assessment Task (PAT) — Investigation + Problem statement</div>
-              <p><span class="label">Lesson 1:</span> PAT brief + choose a simple problem to solve (school/community).</p>
-              <p><span class="label">Lesson 2:</span> Investigation: gather ideas, sketch, list resources.</p>
-              
-            </td>
-            <td>
-PAT brief + investigation template</td>
-            <td>
-Google Docs / Word
-Image search (safe mode)</td>
-            <td>
-Workbooks
-Devices
-Printed rubrics</td>
-          </tr>
-
-          <tr>
-            <td>Week 8:
-2 - 6 March</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Design & Make (Build)</div>
-              <p><span class="label">Lesson 1:</span> Build the solution (Scratch OR microcontroller project).</p>
-              <p><span class="label">Lesson 2:</span> Continue build + test checklist.</p>
-              
-            </td>
-            <td>
-PAT build checklist</td>
-            <td>
-Scratch / MakeCode</td>
-            <td>
-Computers
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 9:
-9 - 13 March</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Evaluation</div>
-              <p><span class="label">Lesson 1:</span> Peer testing + feedback form.</p>
-              <p><span class="label">Lesson 2:</span> Improvements based on feedback.</p>
-              
-            </td>
-            <td>
-Peer feedback form
-Evaluation sheet</td>
-            <td>
-Slides / Posters</td>
-            <td>
-Smartboard
-Workbooks</td>
-          </tr>
-
-          <tr>
-            <td>Week 10:
-16 - 20 March</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Present + Reflect</div>
-              <p><span class="label">Lesson 1:</span> Present to class (demo + explain choices).</p>
-              <p><span class="label">Lesson 2:</span> Reflection writing: what I learned + what I’d change.</p>
-              
-            </td>
-            <td>
-Presentation rubric
-Reflection paragraph prompt</td>
-            <td>
-Projector
-Class drive</td>
-            <td>
-Computers
-Smartboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 11:
-23 - 27 March</td>
-            <td class="content">
-              <div class="caps">Consolidation & Support</div>
-              <p><span class="label">Lesson 1:</span> Catch-up for unfinished PATs.</p>
-              <p><span class="label">Lesson 2:</span> Extension challenge (add a feature).</p>
-              
-            </td>
-            <td>
-Catch-up checklist
-Quiz</td>
-            <td>
-Scratch/MakeCode</td>
-            <td>
-Devices
-Rubrics</td>
-          </tr>
-
-          <tr>
-            <td>Week 12:
-30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
-            <td class="content">
-              <div class="caps">Revision & Skills reinforcement</div>
-              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Typing improvement session (accuracy target).</p>
-              <p><span class="label">Lesson 2:</span> Coding drills (IF THEN + variables).</p>
-              
-            </td>
-            <td>
-Revision pack</td>
-            <td>
-Typing tool + Scratch</td>
-            <td>
-Computers
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 13:
-6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
-            <td class="content">
-              <div class="caps">End-of-term wrap-up</div>
-              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Showcase gallery walk (best work display).</p>
-              <p><span class="label">Lesson 2:</span> Final reflection + goal setting for Term 2.</p>
-              
-            </td>
-            <td>
-Portfolio checklist</td>
-            <td>
-Class drive / folder structure</td>
-            <td>
-Computers
-Workbooks</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-
-    <!-- ===== GRADE 6 ===== -->
-    <div class="header">
-      <div class="school">DISA PRIMARY SCHOOL</div>
-      <div class="title">Term Planning Overview</div>
-      <div class="subject">Coding & Robotics</div>
-      <div class="teacher">Mr Samuels</div>
-      <div class="grade">Grade 6</div>
-      <div class="muted"><b>Timetable:</b> 2 × 60-minute lessons per week</div>
-      <div class="term">Term 1, 2026</div>
-    </div>
-
-    <div class="subhead">Lesson planning:</div>
-
-    <div class="block">
-      <table>
-        <thead>
-          <tr>
-            <th class="col-week">Week  and dates</th>
-            <th class="col-content">Content to be covered and subject integration</th>
-            <th class="col-pages">Textbook pages or Worksheets</th>
-            <th class="col-ict">ICT and links</th>
-            <th class="col-res">Resources used</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr>
-            <td>Week 1:
-14 - 16 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Internet & E-communications + Digital Foundations</div>
-              <p><span class="label">Lesson:</span> Orientation + responsible use</p>
-              <p><span class="label">Lesson 1:</span> Windows login mastery + safe password habits.</p>
-              <p><span class="label">Lesson 2:</span> Internet use rules + appropriate use + email basics.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Rules of using the internet; appropriate use; email; passwords. </p>
-            </td>
-            <td>
-Internet rules worksheet
-Typing baseline sheet</td>
-            <td>
-TypingClub/NitroType
-School email (if available)</td>
-            <td>
-PC lab
-Whiteboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 2:
-19 - 23 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Application Skills — Spreadsheet basics</div>
-              <p><span class="label">Lesson 1:</span> Spreadsheet UI (rows/columns/cells) + data entry.</p>
-              <p><span class="label">Lesson 2:</span> Cell formatting + alignment + borders.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Spreadsheet UI, bar charts, formatting.</p>
-            </td>
-            <td>
-Spreadsheet worksheet
-Bar chart checklist</td>
-            <td>
-Excel / Google Sheets</td>
-            <td>
-Computers
-Smartboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 3:
-26 - 30 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Application Skills — CAD (2D tools continued)</div>
-              <p><span class="label">Lesson 1:</span> Copy a provided 2D drawing with accuracy.</p>
-              <p><span class="label">Lesson 2:</span> Save versions + annotate dimensions (where tool allows).</p>
-              
-            </td>
-            <td>
-CAD practice pack</td>
-            <td>
-Tinkercad / FreeCAD</td>
-            <td>
-Computers
-Mouse</td>
-          </tr>
-
-          <tr>
-            <td>Week 4:
-2 - 6 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Algorithms & Coding — Conditions + collision logic</div>
-              <p><span class="label">Lesson 1:</span> Build a simple animation with events and variables.</p>
-              <p><span class="label">Lesson 2:</span> Introduce “touching” / collision + IF THEN control.</p>
-              
-            </td>
-            <td>
-Scratch game sheet
-Mini-rubric</td>
-            <td>
-Scratch</td>
-            <td>
-Computers</td>
-          </tr>
-
-          <tr>
-            <td>Week 5:
-9 - 13 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics — Microcontroller outputs (sequence)</div>
-              <p><span class="label">Lesson 1:</span> Outputs to multiple LEDs (sequence).</p>
-              <p><span class="label">Lesson 2:</span> Introduce digital input device (button or keypad).</p>
-              
-            </td>
-            <td>
-Circuit worksheet
-Sequence challenge sheet</td>
-            <td>
-MakeCode / Tinkercad Circuits</td>
-            <td>
-Kits
-Breadboards</td>
-          </tr>
-
-          <tr>
-            <td>Week 6:
-16 - 20 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics — Introduce DC motor</div>
-              <p><span class="label">Lesson 1:</span> Connect and control a DC motor (speed concept).</p>
-              <p><span class="label">Lesson 2:</span> Use variables to control motor speed (simple numeric variable).</p>
-              
-            </td>
-            <td>
-Motor safety sheet
-Coding & Circuit worksheet</td>
-            <td>
-MakeCode / Arduino IDE (teacher-led)</td>
-            <td>
-DC motors
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 7:
-23 - 27 February</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Investigation + Design</div>
-              <p><span class="label">Lesson 1:</span> PAT brief + pick one of 2–3 project options.</p>
-              <p><span class="label">Lesson 2:</span> Investigation (possible solutions, sketches, materials).</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> PAT includes Investigation + Design. </p>
-            </td>
-            <td>
-PAT templates</td>
-            <td>
-Docs / Slides</td>
-            <td>
-Rubrics
-Workbooks</td>
-          </tr>
-
-          <tr>
-            <td>Week 8:
-2 - 6 March</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Design & Make (Build)</div>
-              <p><span class="label">Lesson 1:</span> Build prototype + basic code.</p>
-              <p><span class="label">Lesson 2:</span> Continue build + testing checkpoints.</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> PAT includes Design and Make. </p>
-            </td>
-            <td>
-Build checklist</td>
-            <td>
-MakeCode / Arduino</td>
-            <td>
-Kits
-Tools</td>
-          </tr>
-
-          <tr>
-            <td>Week 9:
-9 - 13 March</td>
-            <td class="content">
-              <div class="caps">CAPS: PAT — Evaluation</div>
-              <p><span class="label">Lesson 1:</span> Evaluate against requirements + peer testing.</p>
-              <p><span class="label">Lesson 2:</span> Improve based on testing evidence.</p>
-              
-            </td>
-            <td>
-Evaluation sheet
-Peer test form</td>
-            <td>
-Camera/Tablet
-Slides</td>
-            <td>
-Smartboard
-Devices</td>
-          </tr>
-
-          <tr>
-            <td>Week 10:
-16 - 20 March</td>
-            <td class="content">
-              <div class="caps">CAPS: Formal Assessment</div>
-              <p><span class="label">Lesson 1:</span> Final PAT submissions.</p>
-              <p><span class="label">Lesson 2:</span> Test (internet safety + app skills + coding concepts).</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Formal assessment: Test. </p>
-            </td>
-            <td>
-Test paper
-Memo</td>
-            <td>
-School LMS</td>
-            <td>
-Printed papers</td>
-          </tr>
-
-          <tr>
-            <td>Week 11:
-23 - 27 March</td>
-            <td class="content">
-              <div class="caps">Consolidation & Extension</div>
-              <p><span class="label">Lesson 1:</span> Catch-up + remedial support.</p>
-              <p><span class="label">Lesson 2:</span> Extension: add feature to PAT (sensor, second output, timer).</p>
-              
-            </td>
-            <td>
-Extension checklist</td>
-            <td>
-MakeCode</td>
-            <td>
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 12:
-30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
-            <td class="content">
-              <div class="caps">Revision</div>
-              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Spreadsheet recap + chart quick task.</p>
-              <p><span class="label">Lesson 2:</span> Coding recap (conditions + variables).</p>
-              
-            </td>
-            <td>
-Revision pack</td>
-            <td>
-Excel/Sheets + MakeCode</td>
-            <td>
-Computers
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 13:
-6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
-            <td class="content">
-              <div class="caps">End-of-term wrap-up</div>
-              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Showcase + peer awards.</p>
-              <p><span class="label">Lesson 2:</span> Final reflection + Term 2 preview.</p>
-              
-            </td>
-            <td>
-Portfolio checklist</td>
-            <td>
-Class drive</td>
-            <td>
-Computers</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-
-    <!-- ===== GRADE 7 ===== -->
-    <div class="header">
-      <div class="school">DISA PRIMARY SCHOOL</div>
-      <div class="title">Term Planning Overview</div>
-      <div class="subject">Coding & Robotics</div>
-      <div class="teacher">Mr Samuels</div>
-      <div class="grade">Grade 7</div>
-      <div class="muted"><b>Timetable:</b> 2 × 30-minute lessons per week</div>
-      <div class="term">Term 1, 2026</div>
-    </div>
-
-    <div class="subhead">Lesson planning:</div>
-
-    <div class="block">
-      <table>
-        <thead>
-          <tr>
-            <th class="col-week">Week  and dates</th>
-            <th class="col-content">Content to be covered and subject integration</th>
-            <th class="col-pages">Textbook pages or Worksheets</th>
-            <th class="col-ict">ICT and links</th>
-            <th class="col-res">Resources used</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <tr>
-            <td>Week 1:
-14 - 16 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Digital Foundations + Internet & E-communications</div>
-              <p><span class="label">Lesson:</span> Orientation + lab rules</p>
-              <p><span class="label">Lesson 1:</span> Windows login + file/folder structure (portfolio folder per learner).</p>
-              <p><span class="label">Lesson 2:</span> Typing baseline + targets (WPM + accuracy).</p>
-              
-            </td>
-            <td>
-Typing baseline
-Lab rules sheet</td>
-            <td>
-Typing tool
-School portal</td>
-            <td>
-Computers
-Smartboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 2:
-19 - 23 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Application Skills — Web basics (HTML/CSS refresh)</div>
-              <p><span class="label">Lesson 1:</span> HTML structure recap (tags, formatting, lists, images, links).</p>
-              <p><span class="label">Lesson 2:</span> CSS basics (classes/IDs, style sheets, text formatting).</p>
-              
-            </td>
-            <td>
-HTML/CSS worksheet</td>
-            <td>
-VS Code / Notepad++
-Browser preview</td>
-            <td>
-Computers</td>
-          </tr>
-
-          <tr>
-            <td>Week 3:
-26 - 30 January</td>
-            <td class="content">
-              <div class="caps">CAPS: Algorithms & Coding — Logic + truth tables (intro)</div>
-              <p><span class="label">Lesson 1:</span> Flow diagrams + data types recap.</p>
-              <p><span class="label">Lesson 2:</span> Logic gates + truth tables (combine two gates).</p>
-              
-            </td>
-            <td>
-Logic gates worksheet
-Truth table practice</td>
-            <td>
-Interactive logic simulator (optional)</td>
-            <td>
-Workbooks
-Whiteboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 4:
-2 - 6 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Algorithms & Coding — Relational operators + IF / ELIF</div>
-              <p><span class="label">Lesson 1:</span> Relational operators (>, <, ==, !=, >=, <=).</p>
-              <p><span class="label">Lesson 2:</span> IF statements (indentation, one or multiple commands).</p>
-              
-              <p class="muted"><span class="label">CAPS note:</span> Introduce relational operators + basic IF + ELIF. </p>
-            </td>
-            <td>
-Python worksheet: comparisons
-Mini-rubric</td>
-            <td>
-Python (Thonny)
-Offline runner</td>
-            <td>
-Computers
-Whiteboard</td>
-          </tr>
-
-          <tr>
-            <td>Week 5:
-9 - 13 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Algorithms & Coding — Boolean operators + IF/ELSE</div>
-              <p><span class="label">Lesson 1:</span> AND / OR / NOT with conditions.</p>
-              <p><span class="label">Lesson 2:</span> IF/ELSE + multi-ELIF decision structures.</p>
-              
-            </td>
-            <td>
-Python mini-project brief</td>
-            <td>
-Python (Thonny)</td>
-            <td>
-Computers</td>
-          </tr>
-
-          <tr>
-            <td>Week 6:
-16 - 20 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics Skills — CAD mechanical components</div>
-              <p><span class="label">Lesson 1:</span> CAD tools recap (2D/3D extrusion/dimensions).</p>
-              <p><span class="label">Lesson 2:</span> Mechanical components focus (linkages/gears or pulleys).</p>
-              
-            </td>
-            <td>
-Mechanical drawing worksheet</td>
-            <td>
-CAD tool
-Screenshots evidence</td>
-            <td>
-Computers
-Mouse</td>
-          </tr>
-
-          <tr>
-            <td>Week 7:
-23 - 27 February</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics — Sensors + outputs</div>
-              <p><span class="label">Lesson 1:</span> Breadboards + microcontroller recap (IPO).</p>
-              <p><span class="label">Lesson 2:</span> Ultrasonic sensor + buzzer OR LED response.</p>
-              
-            </td>
-            <td>
-Coding & Circuit worksheet</td>
-            <td>
-MakeCode / Arduino
-Simulators (optional)</td>
-            <td>
-Sensors
-Breadboards</td>
-          </tr>
-
-          <tr>
-            <td>Week 8:
-2 - 6 March</td>
-            <td class="content">
-              <div class="caps">CAPS: Robotics — Extend sensor project</div>
-              <p><span class="label">Lesson 1:</span> Continue ultrasonic sensor project + improve threshold logic.</p>
-              <p><span class="label">Lesson 2:</span> Add second output (LED + buzzer) or variable brightness.</p>
-              
-            </td>
-            <td>
-Project log sheet</td>
-            <td>
-MakeCode / Arduino</td>
-            <td>
-Kits
-Devices</td>
-          </tr>
-
-          <tr>
-            <td>Week 9:
-9 - 13 March</td>
-            <td class="content">
-              <div class="caps">CAPS: Mini PAT (Term 1) — Consolidation + assessment evidence</div>
-              <p><span class="label">Lesson 1:</span> Mini PAT brief (choose: coding mini-game OR sensor alarm).</p>
-              <p><span class="label">Lesson 2:</span> Build + test + gather evidence.</p>
-              
-            </td>
-            <td>
-Mini PAT brief
-Rubric</td>
-            <td>
-Python/MakeCode</td>
-            <td>
-Computers
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 10:
-16 - 20 March</td>
-            <td class="content">
-              <div class="caps">CAPS: Consolidation + Formal task</div>
-              <p><span class="label">Lesson 1:</span> Final Mini PAT submissions.</p>
-              <p><span class="label">Lesson 2:</span> Short test/quiz (operators, IF/ELIF, safety).</p>
-              
-            </td>
-            <td>
-Test paper
-Memo</td>
-            <td>
-School LMS</td>
-            <td>
-Printed papers</td>
-          </tr>
-
-          <tr>
-            <td>Week 11:
-23 - 27 March</td>
-            <td class="content">
-              <div class="caps">Catch-up + Extension</div>
-              <p><span class="label">Lesson 1:</span> Catch-up for Mini PAT improvements.</p>
-              <p><span class="label">Lesson 2:</span> Extension: add feature (score, level, or second sensor output).</p>
-              
-            </td>
-            <td>
-Catch-up checklist</td>
-            <td>
-Python/MakeCode</td>
-            <td>
-Devices</td>
-          </tr>
-
-          <tr>
-            <td>Week 12:
-30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
-            <td class="content">
-              <div class="caps">Revision</div>
-              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Typing improvement + file management.</p>
-              <p><span class="label">Lesson 2:</span> Coding drills (conditions, boolean logic).</p>
-              
-            </td>
-            <td>
-Revision pack</td>
-            <td>
-Typing + Python/MakeCode</td>
-            <td>
-Computers
-Kits</td>
-          </tr>
-
-          <tr>
-            <td>Week 13:
-6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
-            <td class="content">
-              <div class="caps">End-of-term wrap-up</div>
-              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
-              <p><span class="label">Lesson 1:</span> Showcase + peer review.</p>
-              <p><span class="label">Lesson 2:</span> Final reflection + Term 2 preview.</p>
-              
-            </td>
-            <td>
-Portfolio checklist</td>
-            <td>
-Class drive</td>
-            <td>
-Computers</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-  </div>
   <script>
+    'use strict';
+
+    // =========================================================
+    // Expected behavior (as per your screenshot/template):
+    // - EXACT sheet layout like the template (green bars, merged cells, Lesson 1/2 blocks)
+    // - Option A confirmed: One workbook per grade, one sheet per week
+    // - Major strand: Touch typing appears EVERY WEEK (in lesson activities and/or homework)
+    // - Print: Each week is its own page; each grade starts on a new page
+    // =========================================================
+
+    const TERM_LABEL = 'Term 1, 2026';
+    const SUBJECT_LABEL = 'Coding & Robotics';
+    const TEACHER_LABEL = 'Mr Samuels';
+
+    // Public holidays (SA) inside Term 1 window shown in your planning:
+    const HOLIDAYS = {
+      '2026-04-03': 'Good Friday',
+      '2026-04-06': 'Family Day'
+    };
+
+    // Utility: safe HTML
+    function esc(s){
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/\n/g,'<br>');
+    }
+
+    // =========================================================
+    // CAPS-aligned weekly plan per grade
+    // (Structured exactly like your template fields)
+    // =========================================================
+
+    function typingStrand(grade, week){
+      // Touch typing is a major component: present weekly with progression.
+      if(grade === 'Grade 5'){
+        if(week <= 2) return {focus:'Home row + posture + accuracy', hw:'10 minutes home-row practice (accuracy focus).'};
+        if(week <= 5) return {focus:'Common letter patterns + correct fingers', hw:'10 minutes practice: common words + correct fingers.'};
+        if(week <= 9) return {focus:'Short paragraphs + punctuation (accuracy)', hw:'Type a short paragraph (5–7 lines) with punctuation.'};
+        return {focus:'Fluency + neat digital presentation', hw:'Typing revision: 10 minutes + correct errors (backspace discipline).'};
+      }
+      if(grade === 'Grade 6'){
+        if(week <= 2) return {focus:'Baseline + home-row revision + speed targets', hw:'10 minutes timed typing; record WPM + accuracy.'};
+        if(week <= 5) return {focus:'Speed + accuracy + paragraphing', hw:'Type 8–10 lines; focus on spacing + capitals.'};
+        if(week <= 9) return {focus:'Editing skills (copy, paste, select, undo)', hw:'Practice editing: copy/paste, undo/redo, select words.'};
+        return {focus:'Assessment readiness (WPM + accuracy)', hw:'Timed test practice: 3 × 3 minutes; record best WPM.'};
+      }
+      // Grade 7
+      if(week <= 2) return {focus:'Baseline WPM + accuracy + file naming', hw:'Timed typing 3 min; record WPM + accuracy in portfolio.'};
+      if(week <= 5) return {focus:'Fluency + coding-friendly typing (symbols)', hw:'Practice typing brackets, quotes, colons, operators.'};
+      if(week <= 9) return {focus:'Sustained typing + editing + formatting', hw:'Type a short report (10–12 lines); apply basic formatting.'};
+      return {focus:'Exam readiness: accuracy under time', hw:'Typing test: 5 minutes; reflect on errors + fix habits.'};
+    }
+
+    const PLAN = [
+      {
+        grade: 'Grade 5',
+        timetable: '2 × 60-minute lessons per week',
+        weeks: [
+          // Week 1 starts Wed 14 Jan (short week)
+          {
+            week: 1,
+            dates: '14 - 16 January',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Digital Foundations: Windows login + responsible lab use',
+              introduction: 'Welcome, lab rules, device care, why passwords matter.',
+              activities: 'Create learner folder; practice login/logout; save a file with correct name.',
+              check: 'Quick checklist: correct login, correct folder name, file saved.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: posture + home row (accuracy)',
+              introduction: 'Demonstrate finger placement + posture.',
+              activities: 'Home-row drills; short word practice; accuracy tracking.',
+              check: 'Exit ticket: 2-minute typing test (accuracy %).',
+            },
+            integration: 'Life Skills: digital citizenship; English: accurate spelling when typing.',
+            resources: 'Computers, projector, lab rules poster, typing sheets.',
+            homework: () => typingStrand('Grade 5', 1).hw
+          },
+          {
+            week: 2,
+            dates: '19 - 23 January',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Application Skills: Presentations (basic slides)',
+              introduction: 'Show slide layout + title/content.',
+              activities: 'Create 2-slide presentation about “My School”; insert shape; format title.',
+              check: 'Peer check: 2 slides, readable text, saved correctly.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: home row fluency',
+              introduction: 'Warm-up + reminder: eyes on screen, not keyboard.',
+              activities: 'Timed drills; common words; improve accuracy.',
+              check: 'Record WPM + accuracy in portfolio.',
+            },
+            integration: 'English HL: headings + key points; Art: layout and spacing.',
+            resources: 'PowerPoint/Slides, typing tool, example slides.',
+            homework: () => typingStrand('Grade 5', 2).hw
+          },
+          {
+            week: 3,
+            dates: '26 - 30 January',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Robotics Skills: CAD (2D tools)',
+              introduction: 'CAD interface and safety: save versions.',
+              activities: 'Use Line/Circle/Rectangle to draw a simple “robot badge”.',
+              check: 'Teacher check: correct tools used + file saved.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: common patterns',
+              introduction: 'Warm-up + finger discipline.',
+              activities: 'Common bigrams/trigrams; short sentences.',
+              check: '2-minute test; aim accuracy > 90%.',
+            },
+            integration: 'Maths: shapes; Creative Arts: design of badge.',
+            resources: 'Tinkercad/FreeCAD, typing tool, worksheets.',
+            homework: () => typingStrand('Grade 5', 3).hw
+          },
+          {
+            week: 4,
+            dates: '2 - 6 February',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Algorithms: variables + inputs (Scratch)',
+              introduction: 'What is an algorithm? Inputs/outputs.',
+              activities: 'Scratch: ask name + display greeting; save project.',
+              check: 'Demo to teacher: input works; output displays.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing + digital writing',
+              introduction: 'Warm-up; focus on punctuation.',
+              activities: 'Type short paragraph; correct errors; save as .docx.',
+              check: 'Checklist: capitals, full stops, spacing.',
+            },
+            integration: 'English: paragraph writing; Life Skills: perseverance.',
+            resources: 'Scratch, word processor, typing tool.',
+            homework: () => typingStrand('Grade 5', 4).hw
+          },
+          {
+            week: 5,
+            dates: '9 - 13 February',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Robotics: IPO + microcontroller overview',
+              introduction: 'Identify input/output devices; discuss IPO.',
+              activities: 'Label microcontroller diagram; plan a simple output (LED).',
+              check: 'Q&A: identify IPO in a real example.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: fluency + accuracy',
+              introduction: 'Warm-up + focus on correct fingers.',
+              activities: 'Timed drills; type a short instruction list neatly.',
+              check: 'Teacher spot-check: neat layout + spelling.',
+            },
+            integration: 'NST: simple circuits concept; English: instructional writing.',
+            resources: 'micro:bit/Arduino kit (demo), worksheets.',
+            homework: () => typingStrand('Grade 5', 5).hw
+          },
+          {
+            week: 6,
+            dates: '16 - 20 February',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Robotics: LED output (sequence)',
+              introduction: 'Safety: components + connections.',
+              activities: 'MakeCode: blink pattern; change timing; save link.',
+              check: 'Functional demo: blink pattern matches task.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: paragraph + editing',
+              introduction: 'Warm-up; editing shortcuts.',
+              activities: 'Type paragraph; use backspace carefully; fix errors.',
+              check: 'Accuracy target + saved document.',
+            },
+            integration: 'English: editing; Maths: timing numbers.',
+            resources: 'Kits, MakeCode, typing tool.',
+            homework: () => typingStrand('Grade 5', 6).hw
+          },
+          {
+            week: 7,
+            dates: '23 - 27 February',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'PAT: investigation + problem statement',
+              introduction: 'What is a problem statement?',
+              activities: 'Choose problem; brainstorm; sketch; list resources.',
+              check: 'Submit investigation template.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: longer text',
+              introduction: 'Warm-up.',
+              activities: 'Type PAT problem statement neatly (5–7 lines).',
+              check: 'Teacher checks structure + spelling.',
+            },
+            integration: 'English: clarity and structure; Life Skills: teamwork.',
+            resources: 'PAT templates, typing tool, devices.',
+            homework: () => typingStrand('Grade 5', 7).hw
+          },
+          {
+            week: 8,
+            dates: '2 - 6 March',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'PAT: design & make',
+              introduction: 'Plan before build.',
+              activities: 'Build solution (Scratch or microcontroller).',
+              check: 'Progress checklist + evidence screenshot.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: accuracy challenge',
+              introduction: 'Warm-up.',
+              activities: 'Timed accuracy challenge; fix top 5 recurring mistakes.',
+              check: 'Record results in portfolio.',
+            },
+            integration: 'Maths: measure/compare results; English: reflection sentence.',
+            resources: 'Scratch/MakeCode, kits, checklists.',
+            homework: () => typingStrand('Grade 5', 8).hw
+          },
+          {
+            week: 9,
+            dates: '9 - 13 March',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'PAT: evaluation',
+              introduction: 'Why testing matters.',
+              activities: 'Peer test; collect feedback; improve.',
+              check: 'Completed feedback form.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: punctuation + neatness',
+              introduction: 'Warm-up.',
+              activities: 'Type evaluation notes; use bullet points.',
+              check: 'Teacher checks bullets and spacing.',
+            },
+            integration: 'English: bullet points; Life Skills: giving feedback respectfully.',
+            resources: 'Forms, typing tool, devices.',
+            homework: () => typingStrand('Grade 5', 9).hw
+          },
+          {
+            week: 10,
+            dates: '16 - 20 March',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'PAT: present',
+              introduction: 'How to explain choices.',
+              activities: 'Short demo + explain process.',
+              check: 'Rubric scoring.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: reflection writing',
+              introduction: 'Warm-up.',
+              activities: 'Type reflection paragraph; save to portfolio.',
+              check: 'Checklist: topic sentence + 3 points.',
+            },
+            integration: 'English: oral + writing; Life Skills: confidence.',
+            resources: 'Projector, rubrics, typing tool.',
+            homework: () => typingStrand('Grade 5', 10).hw
+          },
+          {
+            week: 11,
+            dates: '23 - 27 March',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Consolidation: catch-up + extension',
+              introduction: 'Identify gaps.',
+              activities: 'Finish PAT; add one feature if complete.',
+              check: 'Teacher sign-off list.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: revision',
+              introduction: 'Warm-up.',
+              activities: 'Typing drills + error correction.',
+              check: 'Accuracy goal set.',
+            },
+            integration: 'Life Skills: goal setting.',
+            resources: 'Devices, checklists, typing tool.',
+            homework: () => typingStrand('Grade 5', 11).hw
+          },
+          {
+            week: 12,
+            dates: '30 March - 3 April (Fri 3 Apr – Good Friday: no school)',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'Revision: typing + coding drills',
+              introduction: 'Short week note: Good Friday holiday.',
+              activities: 'Typing accuracy session + Scratch review (IF + variables).',
+              check: 'Mini-quiz + saved typing results.',
+            },
+            lesson2: {
+              capsTopic: 'Public Holiday placeholder',
+              introduction: 'Good Friday (Fri 3 April) — no school.',
+              activities: 'No lesson.',
+              check: 'N/A',
+            },
+            integration: 'Revision skills.',
+            resources: 'Typing tool, Scratch.',
+            homework: () => typingStrand('Grade 5', 12).hw
+          },
+          {
+            week: 13,
+            dates: '6 - 10 April (Mon 6 Apr – Family Day: no school)',
+            term: TERM_LABEL,
+            lesson1: {
+              capsTopic: 'End-of-term: showcase',
+              introduction: 'Short week note: Family Day holiday.',
+              activities: 'Showcase gallery walk + peer review.',
+              check: 'Peer review slips.',
+            },
+            lesson2: {
+              capsTopic: 'Touch Typing: final benchmark',
+              introduction: 'Warm-up.',
+              activities: 'Final benchmark test; compare to Week 1 baseline.',
+              check: 'Record WPM + accuracy; set Term 2 target.',
+            },
+            integration: 'Maths: compare numbers (progress).',
+            resources: 'Portfolios, typing tool.',
+            homework: () => typingStrand('Grade 5', 13).hw
+          },
+        ]
+      },
+
+      // ===== Grade 6 =====
+      {
+        grade: 'Grade 6',
+        timetable: '2 × 60-minute lessons per week',
+        weeks: Array.from({length:13}, (_,i) => i+1).map(w => {
+          const t = typingStrand('Grade 6', w);
+          const base = {
+            week: w,
+            term: TERM_LABEL,
+            dates: [
+              '14 - 16 January','19 - 23 January','26 - 30 January','2 - 6 February','9 - 13 February','16 - 20 February','23 - 27 February','2 - 6 March','9 - 13 March','16 - 20 March','23 - 27 March','30 March - 3 April (Fri 3 Apr – Good Friday: no school)','6 - 10 April (Mon 6 Apr – Family Day: no school)'
+            ][w-1],
+            lesson1:{capsTopic:'', introduction:'', activities:'', check:''},
+            lesson2:{capsTopic:'Touch Typing (major strand): ' + t.focus, introduction:'Warm-up + target setting.', activities:'Timed typing + accuracy; record evidence in portfolio.', check:'WPM + accuracy recorded.'},
+            integration:'English: writing + editing; Life Skills: perseverance.',
+            resources:'Computers, typing tool, worksheets.',
+            homework: () => t.hw
+          };
+
+          // CAPS progression blocks for Grade 6
+          if(w===1){
+            base.lesson1 = { capsTopic:'Internet & E-communications + Digital Foundations', introduction:'Responsible use; passwords; email overview.', activities:'Login routine; internet rules poster; safe use discussion.', check:'Quick quiz: rules + password checklist.' };
+          } else if(w===2){
+            base.lesson1 = { capsTopic:'Application Skills: Spreadsheets (UI + data)', introduction:'Rows/columns/cells; data entry.', activities:'Enter dataset; format cells; align; borders.', check:'Teacher checks formatting + save name.' };
+          } else if(w===3){
+            base.lesson1 = { capsTopic:'Application Skills: CAD accuracy', introduction:'Review tools; saving versions.', activities:'Copy a 2D drawing; annotate if available.', check:'Accuracy checklist.' };
+          } else if(w===4){
+            base.lesson1 = { capsTopic:'Algorithms: conditions + collision (Scratch)', introduction:'Events + variables recap.', activities:'Build mini-game; use touching + IF THEN.', check:'Demo: collision triggers response.' };
+          } else if(w===5){
+            base.lesson1 = { capsTopic:'Robotics: outputs sequence + input device', introduction:'IPO; outputs vs inputs.', activities:'LED sequence; add button control.', check:'Functional test + photo evidence.' };
+          } else if(w===6){
+            base.lesson1 = { capsTopic:'Robotics: DC motor control', introduction:'Motor safety; speed concept.', activities:'Connect/control motor; use variable for speed.', check:'Teacher sign-off + reflection line.' };
+          } else if(w===7){
+            base.lesson1 = { capsTopic:'PAT: Investigation + Design', introduction:'Choose project option.', activities:'Investigate; sketches; materials list.', check:'Submit template.' };
+          } else if(w===8){
+            base.lesson1 = { capsTopic:'PAT: Design & Make', introduction:'Build plan.', activities:'Build prototype + basic code.', check:'Checkpoint rubric.' };
+          } else if(w===9){
+            base.lesson1 = { capsTopic:'PAT: Evaluation', introduction:'Test against requirements.', activities:'Peer testing; improvements.', check:'Completed evaluation sheet.' };
+          } else if(w===10){
+            base.lesson1 = { capsTopic:'Formal Assessment', introduction:'Assessment briefing.', activities:'Final PAT submission + short test.', check:'Marked rubric + test score.' };
+          } else if(w===11){
+            base.lesson1 = { capsTopic:'Consolidation + Extension', introduction:'Catch-up & stretch.', activities:'Remedial support; add feature if finished.', check:'Teacher checklist.' };
+          } else if(w===12){
+            base.lesson1 = { capsTopic:'Revision (short week)', introduction:'Good Friday note.', activities:'Spreadsheet recap + coding recap.', check:'Mini quiz.' };
+            base.lesson2 = { capsTopic:'Public Holiday placeholder', introduction:'Good Friday (Fri 3 April) — no school.', activities:'No lesson.', check:'N/A' };
+          } else if(w===13){
+            base.lesson1 = { capsTopic:'Wrap-up (short week)', introduction:'Family Day note.', activities:'Showcase + peer awards + reflection.', check:'Reflection submitted.' };
+            // keep typing benchmark
+          }
+
+          // Bring in typing as a visible major component in Lesson 1 too (where appropriate)
+          if([2,3,4,5,6,9,10,11].includes(w)){
+            base.lesson1.activities += `\n\nTouch Typing link: 8–10 minutes skill drill (focus: ${t.focus}).`;
+          }
+
+          base.resources = 'Computers, projector/smartboard, worksheets, typing tool, (kits as needed).';
+          return base;
+        })
+      },
+
+      // ===== Grade 7 =====
+      {
+        grade: 'Grade 7',
+        timetable: '2 × 30-minute lessons per week',
+        weeks: Array.from({length:13}, (_,i) => i+1).map(w => {
+          const t = typingStrand('Grade 7', w);
+          const base = {
+            week: w,
+            term: TERM_LABEL,
+            dates: [
+              '14 - 16 January','19 - 23 January','26 - 30 January','2 - 6 February','9 - 13 February','16 - 20 February','23 - 27 February','2 - 6 March','9 - 13 March','16 - 20 March','23 - 27 March','30 March - 3 April (Fri 3 Apr – Good Friday: no school)','6 - 10 April (Mon 6 Apr – Family Day: no school)'
+            ][w-1],
+            lesson1:{capsTopic:'', introduction:'', activities:'', check:''},
+            lesson2:{capsTopic:'Touch Typing (major strand): ' + t.focus, introduction:'Warm-up + goal for the week.', activities:'Timed typing + accuracy; include symbols if coding week; record evidence.', check:'WPM + accuracy logged in folder.'},
+            integration:'Maths: logic and comparisons; English: clear technical writing.',
+            resources:'Computers, Thonny/Python, typing tool, worksheets, kits as needed.',
+            homework: () => t.hw
+          };
+
+          if(w===1){
+            base.lesson1 = { capsTopic:'Digital Foundations + Internet & E-communications', introduction:'Lab rules + portfolio folder structure.', activities:'Create folder structure; file naming; login/logout routine.', check:'Folder check + file naming check.' };
+          } else if(w===2){
+            base.lesson1 = { capsTopic:'Web basics: HTML/CSS refresh', introduction:'HTML structure + CSS selectors.', activities:'Create simple page; style text; save and open in browser.', check:'Page displays correctly.' };
+            base.lesson1.activities += `\nTouch Typing link: practice typing HTML symbols (< > / " ' : ;).`;
+          } else if(w===3){
+            base.lesson1 = { capsTopic:'Logic + Truth tables', introduction:'Flow diagrams + data types recap.', activities:'Complete truth tables; combine two gates; explain outputs.', check:'Short quiz: truth table completion.' };
+          } else if(w===4){
+            base.lesson1 = { capsTopic:'Python: relational operators + IF/ELIF', introduction:'Comparisons and indentation rules.', activities:'Write small programs using >,<,== and IF/ELIF.', check:'Run code successfully; explain output.' };
+            base.lesson2.activities += `\nSymbols practice: () [] {} : == != >= <=`;
+          } else if(w===5){
+            base.lesson1 = { capsTopic:'Python: boolean operators + IF/ELSE', introduction:'AND/OR/NOT; decision structures.', activities:'Mini program: eligibility checker with AND/OR/NOT.', check:'Program matches test cases.' };
+            base.lesson2.activities += `\nSymbols practice: and/or/not, quotes, colons.`;
+          } else if(w===6){
+            base.lesson1 = { capsTopic:'CAD mechanical components', introduction:'2D/3D recap + saving evidence.', activities:'Draw simple linkage/gear concept; label parts.', check:'Screenshot evidence saved.' };
+          } else if(w===7){
+            base.lesson1 = { capsTopic:'Sensors + outputs', introduction:'IPO recap + breadboard safety.', activities:'Ultrasonic sensor triggers buzzer/LED.', check:'Functional demo.' };
+          } else if(w===8){
+            base.lesson1 = { capsTopic:'Extend sensor project', introduction:'Improve logic with variables.', activities:'Add second output; adjust threshold; document changes.', check:'Project log completed.' };
+          } else if(w===9){
+            base.lesson1 = { capsTopic:'Mini PAT (Term 1)', introduction:'Choose option: mini-game OR sensor alarm.', activities:'Build + test; gather screenshots/evidence.', check:'Evidence pack submitted.' };
+          } else if(w===10){
+            base.lesson1 = { capsTopic:'Formal task: submission + short quiz', introduction:'Assessment expectations.', activities:'Final submission + quiz (operators/IF/safety).', check:'Marked quiz.' };
+          } else if(w===11){
+            base.lesson1 = { capsTopic:'Catch-up + Extension', introduction:'Fix gaps and improve.', activities:'Complete missing evidence; add one extension feature.', check:'Teacher sign-off.' };
+          } else if(w===12){
+            base.lesson1 = { capsTopic:'Revision (short week)', introduction:'Good Friday note.', activities:'Typing + file management + coding drills.', check:'Typing evidence + drill results.' };
+            base.lesson2 = { capsTopic:'Public Holiday placeholder', introduction:'Good Friday (Fri 3 April) — no school.', activities:'No lesson.', check:'N/A' };
+          } else if(w===13){
+            base.lesson1 = { capsTopic:'Wrap-up (short week)', introduction:'Family Day note.', activities:'Showcase + reflection + Term 2 preview.', check:'Reflection saved.' };
+          }
+
+          // Make typing visible as a major component inside lesson 1 frequently (since grade 7 has short periods)
+          if([1,2,4,5,9,10,11].includes(w)){
+            base.lesson1.activities += `\n\nTouch Typing (major): 6–8 min drill focusing on ${t.focus}.`;
+          }
+
+          return base;
+        })
+      }
+    ];
+
+    // =========================================================
+    // HTML Render (one page per week; matches template blocks)
+    // =========================================================
+
+    function render(){
+      const root = document.getElementById('doc');
+      root.innerHTML = '';
+
+      PLAN.forEach(g => {
+        g.weeks.forEach(wk => {
+          const page = document.createElement('div');
+          page.className = 'page';
+          page.dataset.grade = g.grade;
+
+          const hw = typeof wk.homework === 'function' ? wk.homework() : (wk.homework || '');
+
+          page.innerHTML = `
+            <table class="plan">
+              <colgroup>
+                <col style="width:8%" />
+                <col style="width:10%" />
+                <col style="width:18%" />
+                <col style="width:18%" />
+                <col style="width:18%" />
+                <col style="width:18%" />
+                <col style="width:10%" />
+              </colgroup>
+              <tr>
+                <td colspan="3" class="top-left">INTERMEDIATE PHASE\nWEEKLY LESSON PLAN</td>
+                <td colspan="2" class="top-center">
+                  <div class="logo-wrap">
+                    <img class="logo" src="logo.png" alt="DISA Logo" onerror="this.style.display='none'" />
+                    <div class="school">DISA PRIMARY SCHOOL</div>
+                  </div>
+                </td>
+                <td colspan="2" class="top-right">SUBJECT:\n<span class="muted">${esc(SUBJECT_LABEL)}</span></td>
+              </tr>
+
+              <tr>
+                <td colspan="1" class="green">Term:</td>
+                <td colspan="2" class="green">Week:</td>
+                <td colspan="2" class="green">Date:</td>
+                <td colspan="1" class="green">Grade:</td>
+                <td colspan="1" class="green">Teacher:</td>
+              </tr>
+              <tr>
+                <td colspan="1">${esc(wk.term)}</td>
+                <td colspan="2">Week ${wk.week}</td>
+                <td colspan="2">${esc(wk.dates)}</td>
+                <td colspan="1">${esc(g.grade)}</td>
+                <td colspan="1">${esc(TEACHER_LABEL)}</td>
+              </tr>
+
+              <tr>
+                <td colspan="1"></td>
+                <td colspan="3" class="lesson-head">LESSON 1</td>
+                <td colspan="3" class="lesson-head">LESSON 2</td>
+              </tr>
+
+              <tr>
+                <td rowspan="4" class="side-vertical">TEACHING AND\nLEARNING\nACTIVITIES</td>
+                <td class="grey">CAPS Topic</td>
+                <td colspan="2">${esc(wk.lesson1.capsTopic)}</td>
+                <td colspan="3">${esc(wk.lesson2.capsTopic)}</td>
+              </tr>
+              <tr>
+                <td class="grey">Introduction</td>
+                <td colspan="2">${esc(wk.lesson1.introduction)}</td>
+                <td colspan="3">${esc(wk.lesson2.introduction)}</td>
+              </tr>
+              <tr>
+                <td class="grey">Activities</td>
+                <td colspan="2">${esc(wk.lesson1.activities)}</td>
+                <td colspan="3">${esc(wk.lesson2.activities)}</td>
+              </tr>
+              <tr>
+                <td class="grey">Check for understanding</td>
+                <td colspan="2">${esc(wk.lesson1.check)}</td>
+                <td colspan="3">${esc(wk.lesson2.check)}</td>
+              </tr>
+
+              <tr>
+                <td colspan="2" class="grey">INTEGRATION</td>
+                <td colspan="5">${esc(wk.integration)}</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="grey">RESOURCES</td>
+                <td colspan="5">${esc(wk.resources)}</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="grey">HOMEWORK</td>
+                <td colspan="5">${esc(hw)}</td>
+              </tr>
+            </table>
+          `;
+
+          root.appendChild(page);
+        });
+      });
+
+      clearGradePrintFilter();
+    }
+
+    // =========================================================
+    // Print / PDF
+    // =========================================================
     function downloadPDF(){
-      // Most browsers support "Save as PDF" from the print dialog
-      // This opens the print dialog so you can choose "Save as PDF"
+      clearGradePrintFilter();
       window.print();
     }
+
+    function downloadPDFGrade(gradeName){
+      applyGradePrintFilter(gradeName);
+      window.print();
+      setTimeout(clearGradePrintFilter, 300);
+    }
+
+    function applyGradePrintFilter(gradeName){
+      document.body.classList.add('print-grade-active');
+      document.querySelectorAll('.page').forEach(p => {
+        const match = (p.dataset.grade === gradeName);
+        p.classList.toggle('print-grade-show', match);
+      });
+    }
+
+    function clearGradePrintFilter(){
+      document.body.classList.remove('print-grade-active');
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('print-grade-show'));
+    }
+
+    // =========================================================
+    // XLSX export — EXACT template-like layout using ExcelJS
+    // Option A: workbook per grade; one sheet per week
+    // =========================================================
+
+    async function fetchLogoBase64(){
+      // logo.png should be in the GitHub repo root (same folder as index.html)
+      // If missing, we export without the image.
+      try{
+        const res = await fetch('logo.png', { cache: 'no-store' });
+        if(!res.ok) return null;
+        const blob = await res.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        // Convert to base64
+        let binary = '';
+        const bytes = new Uint8Array(arrayBuffer);
+        for(let i=0;i<bytes.byteLength;i++) binary += String.fromCharCode(bytes[i]);
+        return btoa(binary);
+      }catch(e){
+        return null;
+      }
+    }
+
+    function setBorder(cell){
+      cell.border = {
+        top: {style:'thin'},
+        left:{style:'thin'},
+        bottom:{style:'thin'},
+        right:{style:'thin'}
+      };
+    }
+
+    function fillGreen(cell){
+      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF93C47D'} };
+      cell.font = { bold:true, color:{argb:'FFFFFFFF'} };
+      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+    }
+
+    function fillGrey(cell){
+      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFD9D9D9'} };
+      cell.font = { bold:true, color:{argb:'FF000000'} };
+      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+    }
+
+    function centerBold(cell, size=14){
+      cell.font = { bold:true, size };
+      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+    }
+
+    function leftBold(cell, size=14){
+      cell.font = { bold:true, size };
+      cell.alignment = { vertical:'top', horizontal:'left', wrapText:true };
+    }
+
+    async function downloadXLSXGrade(gradeName){
+      if(typeof ExcelJS === 'undefined' || typeof saveAs === 'undefined'){
+        alert('Export libraries failed to load. Please refresh the page and try again.');
+        return;
+      }
+
+      const grade = PLAN.find(g => g.grade === gradeName);
+      if(!grade){
+        alert('Grade not found.');
+        return;
+      }
+
+      const wb = new ExcelJS.Workbook();
+      wb.creator = 'DISA Planning';
+
+      const logoB64 = await fetchLogoBase64();
+
+      for(const wk of grade.weeks){
+        const ws = wb.addWorksheet(`Week ${wk.week}`);
+
+        // Column widths approximated to match screenshot (A–N in template).
+        ws.columns = [
+          { width: 3 },  // A (margin)
+          { width: 18 }, // B
+          { width: 18 }, // C
+          { width: 18 }, // D
+          { width: 18 }, // E
+          { width: 18 }, // F
+          { width: 18 }, // G
+          { width: 18 }, // H
+          { width: 18 }, // I
+          { width: 18 }, // J
+          { width: 18 }, // K
+          { width: 18 }, // L
+          { width: 18 }, // M
+          { width: 3 },  // N (margin)
+        ];
+
+        // Row heights like template
+        ws.getRow(1).height = 40;
+        ws.getRow(2).height = 18;
+        ws.getRow(3).height = 22;
+        ws.getRow(4).height = 20;
+        ws.getRow(5).height = 22;
+        ws.getRow(6).height = 42;
+        ws.getRow(7).height = 70;
+        ws.getRow(8).height = 42;
+        ws.getRow(9).height = 24;
+        ws.getRow(10).height = 24;
+        ws.getRow(11).height = 24;
+
+        // ===== Top row (merged blocks) =====
+        // INTERMEDIATE PHASE WEEKLY LESSON PLAN (B1:E1)
+        ws.mergeCells('B1','E1');
+        ws.getCell('B1').value = 'INTERMEDIATE PHASE\nWEEKLY LESSON PLAN';
+        leftBold(ws.getCell('B1'), 14);
+
+        // Center logo + school (F1:K1)
+        ws.mergeCells('F1','K1');
+        ws.getCell('F1').value = 'DISA PRIMARY SCHOOL';
+        centerBold(ws.getCell('F1'), 16);
+
+        // Subject (L1:M1)
+        ws.mergeCells('L1','M1');
+        ws.getCell('L1').value = `SUBJECT:\n${SUBJECT_LABEL}`;
+        centerBold(ws.getCell('L1'), 14);
+
+        // Add logo image if available (positioned near top center)
+        if(logoB64){
+          const imageId = wb.addImage({ base64: logoB64, extension: 'png' });
+          ws.addImage(imageId, {
+            tl: { col: 6.8, row: 0.15 },
+            ext: { width: 70, height: 70 }
+          });
+        }
+
+        // Borders top row
+        for(const c of ['B','C','D','E','F','G','H','I','J','K','L','M']){
+          setBorder(ws.getCell(`${c}1`));
+        }
+
+        // ===== Green header row labels (Row 2) =====
+        // Term (B2:C2), Week (D2:E2), Date (F2:K2), Grade (L2), Teacher (M2)
+        ws.mergeCells('B2','C2'); ws.getCell('B2').value='Term:'; fillGreen(ws.getCell('B2'));
+        ws.mergeCells('D2','E2'); ws.getCell('D2').value='Week:'; fillGreen(ws.getCell('D2'));
+        ws.mergeCells('F2','K2'); ws.getCell('F2').value='Date:'; fillGreen(ws.getCell('F2'));
+        ws.getCell('L2').value='Grade:'; fillGreen(ws.getCell('L2'));
+        ws.getCell('M2').value='Teacher:'; fillGreen(ws.getCell('M2'));
+
+        // Borders row2
+        ['B2','C2','D2','E2','F2','G2','H2','I2','J2','K2','L2','M2'].forEach(a=>setBorder(ws.getCell(a)));
+
+        // ===== Row 3 values =====
+        ws.mergeCells('B3','C3'); ws.getCell('B3').value = wk.term;
+        ws.mergeCells('D3','E3'); ws.getCell('D3').value = `Week ${wk.week}`;
+        ws.mergeCells('F3','K3'); ws.getCell('F3').value = wk.dates;
+        ws.getCell('L3').value = gradeName;
+        ws.getCell('M3').value = TEACHER_LABEL;
+
+        ['B3','D3','F3','L3','M3'].forEach(addr=>{
+          const cell = ws.getCell(addr);
+          cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+          setBorder(cell);
+        });
+        // Also border the merged range cells
+        ['C3','E3','G3','H3','I3','J3','K3'].forEach(addr=>setBorder(ws.getCell(addr)));
+
+        // ===== Lesson headers row 4 =====
+        ws.mergeCells('C4','G4'); ws.getCell('C4').value = 'LESSON 1'; centerBold(ws.getCell('C4'), 14);
+        ws.mergeCells('H4','M4'); ws.getCell('H4').value = 'LESSON 2'; centerBold(ws.getCell('H4'), 14);
+        // Borders row4
+        for(const col of ['B','C','D','E','F','G','H','I','J','K','L','M']) setBorder(ws.getCell(`${col}4`));
+
+        // ===== Teaching & Learning Activities vertical label (B5:B8) =====
+        ws.mergeCells('B5','B8');
+        ws.getCell('B5').value = 'TEACHING AND\nLEARNING\nACTIVITIES';
+        ws.getCell('B5').alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+        ws.getCell('B5').font = { bold:true };
+        setBorder(ws.getCell('B5'));
+        ['B6','B7','B8'].forEach(a=>setBorder(ws.getCell(a)));
+
+        // Row labels in C5:C8 (grey)
+        const labels = ['CAPS Topic','Introduction','Activities','Check for understanding'];
+        labels.forEach((lab, idx) => {
+          const r = 5 + idx;
+          ws.getCell(`C${r}`).value = lab;
+          fillGrey(ws.getCell(`C${r}`));
+          setBorder(ws.getCell(`C${r}`));
+        });
+
+        // Lesson 1 content D5:G8
+        const l1 = wk.lesson1;
+        ws.mergeCells('D5','G5'); ws.getCell('D5').value = l1.capsTopic;
+        ws.mergeCells('D6','G6'); ws.getCell('D6').value = l1.introduction;
+        ws.mergeCells('D7','G7'); ws.getCell('D7').value = l1.activities;
+        ws.mergeCells('D8','G8'); ws.getCell('D8').value = l1.check;
+
+        // Lesson 2 content H5:M8
+        const l2 = wk.lesson2;
+        ws.mergeCells('H5','M5'); ws.getCell('H5').value = l2.capsTopic;
+        ws.mergeCells('H6','M6'); ws.getCell('H6').value = l2.introduction;
+        ws.mergeCells('H7','M7'); ws.getCell('H7').value = l2.activities;
+        ws.mergeCells('H8','M8'); ws.getCell('H8').value = l2.check;
+
+        // Apply alignment + borders for content blocks
+        const contentCells = ['D5','D6','D7','D8','H5','H6','H7','H8'];
+        contentCells.forEach(addr => {
+          const cell = ws.getCell(addr);
+          cell.alignment = { vertical:'top', horizontal:'left', wrapText:true };
+          setBorder(cell);
+        });
+        // Border the merged spans (E/F/G and I/J/K/L/M)
+        for(const r of [5,6,7,8]){
+          ['E','F','G'].forEach(c=>setBorder(ws.getCell(`${c}${r}`)));
+          ['I','J','K','L','M'].forEach(c=>setBorder(ws.getCell(`${c}${r}`)));
+          setBorder(ws.getCell(`H${r}`));
+        }
+
+        // ===== Integration / Resources / Homework rows =====
+        // Labels in B9:C11 (grey) and content in D9:M11
+        const tail = [
+          { row:9, label:'INTEGRATION', value: wk.integration },
+          { row:10, label:'RESOURCES', value: wk.resources },
+          { row:11, label:'HOMEWORK', value: (typeof wk.homework === 'function' ? wk.homework() : (wk.homework || '')) }
+        ];
+
+        tail.forEach(t => {
+          ws.mergeCells(`B${t.row}`,`C${t.row}`);
+          ws.getCell(`B${t.row}`).value = t.label;
+          fillGrey(ws.getCell(`B${t.row}`));
+          setBorder(ws.getCell(`B${t.row}`));
+          setBorder(ws.getCell(`C${t.row}`));
+
+          ws.mergeCells(`D${t.row}`,`M${t.row}`);
+          ws.getCell(`D${t.row}`).value = t.value;
+          ws.getCell(`D${t.row}`).alignment = { vertical:'top', horizontal:'left', wrapText:true };
+          setBorder(ws.getCell(`D${t.row}`));
+          for(const c of ['E','F','G','H','I','J','K','L','M']) setBorder(ws.getCell(`${c}${t.row}`));
+        });
+
+        // Global borders on header row 1 cells
+        ['B1','F1','L1'].forEach(a=>setBorder(ws.getCell(a)));
+        // Make sure merged areas are bordered (best-effort)
+
+        // Page setup (print like a single page)
+        ws.pageSetup = {
+          orientation: 'portrait',
+          fitToPage: true,
+          fitToWidth: 1,
+          fitToHeight: 1,
+          margins: { left: 0.3, right: 0.3, top: 0.4, bottom: 0.4, header: 0, footer: 0 }
+        };
+      }
+
+      const buf = await wb.xlsx.writeBuffer();
+      saveAs(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `DISA_${gradeName.replace(' ','')}_Term1_WeeklyPlan.xlsx`);
+    }
+
+    // =========================================================
+    // Self-tests (guard rails)
+    // =========================================================
+    (function tests(){
+      try{
+        console.assert(Array.isArray(PLAN) && PLAN.length === 3, 'Expected 3 grades in PLAN');
+        console.assert(PLAN.every(g => g.weeks.length === 13), 'Each grade should have 13 weeks');
+        console.assert(esc('a\nb') === 'a<br>b', 'esc should convert newlines');
+      }catch(e){
+        console.warn('Self-tests failed', e);
+      }
+    })();
+
+    render();
   </script>
 </body>
 </html>
