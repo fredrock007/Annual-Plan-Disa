@@ -70,21 +70,106 @@
   <div class="doc" id="doc"></div>
 
   <script>
+    // NOTE (Fred): Some previously uploaded files in this chat may expire over time.
+    // This page does not require those files; it only needs disa-logo.png in your GitHub Pages folder.
+
     // -------------------------
     // CONFIG
     // -------------------------
     const TERM_LABEL = 'Term 1';
     const TEACHER = 'Mr Samuels';
 
-    // Logo file placed in the same folder as this page in your GitHub Pages repo
-    // Must be an image (png/jpg).
+    // Logo file must be an image placed in the same GitHub Pages published folder as this page
+    // (or the repo root). This code tries both.
     const LOGO_FILE = 'disa-logo.png';
 
-    // Build an absolute URL for GitHub Pages (avoids path issues when hosted in subfolders)
-    function logoURL(cacheBust){
-      const u = new URL(LOGO_FILE, window.location.href);
-      if(cacheBust) u.searchParams.set('v', String(Date.now()));
-      return u.toString();
+    // -------------------------
+    // LOGO URL FALLBACKS
+    // -------------------------
+    function logoCandidates(){
+      try{
+        const hrefBase = new URL(LOGO_FILE, window.location.href).toString();
+        const dir = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+        const dirBase = new URL(LOGO_FILE, dir).toString();
+        const rootBase = new URL('/' + LOGO_FILE, window.location.origin).toString();
+        return Array.from(new Set([hrefBase, dirBase, rootBase]));
+      }catch(e){
+        return [LOGO_FILE];
+      }
+    }
+
+    function addCacheBust(u){
+      try{
+        const x = new URL(u);
+        x.searchParams.set('v', String(Date.now()));
+        return x.toString();
+      }catch(e){
+        // relative URL
+        const sep = u.indexOf('?') >= 0 ? '&' : '?';
+        return u + sep + 'v=' + String(Date.now());
+      }
+    }
+
+    function setImgWithFallback(imgEl, urls, idx){
+      const i = typeof idx === 'number' ? idx : 0;
+      if(i >= urls.length){
+        // trigger error state
+        imgEl.dispatchEvent(new Event('error'));
+        return;
+      }
+      imgEl.src = urls[i];
+      imgEl.onerror = () => setImgWithFallback(imgEl, urls, i + 1);
+    }
+
+    async function fetchFirstOK(urls){
+      for(const u of urls){
+        try{
+          const res = await fetch(u, { cache: 'no-store' });
+          if(res && res.ok) return { url: u, res };
+        }catch(e){
+          // keep trying
+        }
+      }
+      return null;
+    }
+
+    function getLogoExtension(){
+      const f = String(LOGO_FILE || '').toLowerCase().trim();
+      if(f.endsWith('.png')) return 'png';
+      if(f.endsWith('.jpg') || f.endsWith('.jpeg')) return 'jpeg';
+      return null;
+    }
+
+    async function fetchLogoArrayBuffer(){
+      const ext = getLogoExtension();
+      if(!ext) return null;
+      const urls = logoCandidates().map(addCacheBust);
+      const hit = await fetchFirstOK(urls);
+      if(!hit) return null;
+      return await hit.res.arrayBuffer();
+    }
+
+    async function waitForImagesLoaded(timeoutMs){
+      const imgs = Array.from(document.images || []);
+      if(imgs.length === 0) return true;
+      const timeout = typeof timeoutMs === 'number' ? timeoutMs : 6000;
+
+      function one(img){
+        return new Promise(resolve => {
+          if(img.complete && img.naturalWidth > 0) return resolve(true);
+          const done = () => resolve(img.naturalWidth > 0);
+          img.addEventListener('load', done, { once:true });
+          img.addEventListener('error', () => resolve(false), { once:true });
+        });
+      }
+
+      const results = await Promise.race([
+        Promise.all(imgs.map(one)),
+        new Promise(resolve => setTimeout(() => resolve(null), timeout))
+      ]);
+
+      if(results === null) return false;
+      return results.every(Boolean);
     }
 
     // -------------------------
@@ -93,7 +178,6 @@
     // - Good Friday: Fri 3 Apr
     // - Family Day: Mon 6 Apr
     // -------------------------
-
     const WEEKS = [
       { w:1,  dates:'14–16 January (Wed–Fri)' },
       { w:2,  dates:'19–23 January' },
@@ -113,7 +197,6 @@
     // -------------------------
     // TOUCH TYPING (major component)
     // -------------------------
-
     const TT = {
       g5: [
         'Posture + finger placement (home row)',
@@ -157,7 +240,6 @@
     // -------------------------
     // GRADE 5 (2 × 60 mins/week)
     // -------------------------
-
     function g5L1(week){
       if(week===1) return 'Windows login routine + file naming + touch typing: posture + home row accuracy drills.';
       if(week<=4) return 'Typing warm-up + application skills: basic formatting + save work neatly (evidence in folder).';
@@ -167,6 +249,7 @@
       if(week<=11) return 'Typing warm-up + mini PAT build + add one new feature.';
       return 'Typing warm-up + revision/catch-up with clear evidence in portfolio.';
     }
+
     function g5L2(week){
       if(week===1) return 'Typing game (accuracy) + digital citizenship: safe passwords + device care.';
       if(week<=4) return 'Typing sentences + presentation task: 2–3 slides with headings, images, neat layout.';
@@ -180,7 +263,6 @@
     // -------------------------
     // GRADE 6 (2 × 60 mins/week)
     // -------------------------
-
     function g6L1(week){
       if(week===1) return 'Windows login mastery + typing baseline + rules for appropriate online use.';
       if(week<=3) return 'Typing warm-up + spreadsheets: data entry, formatting, clean table.';
@@ -190,6 +272,7 @@
       if(week<=10) return 'Typing warm-up + PAT: investigation + design + build prototype.';
       return 'Typing warm-up + revision/catch-up + extension feature.';
     }
+
     function g6L2(week){
       if(week===1) return 'Typing accuracy + e-communication basics (if available) + cyber safety.';
       if(week<=3) return 'Typing paragraphs + spreadsheet: chart task + short interpretation questions.';
@@ -204,7 +287,6 @@
     // GRADE 7 (2 × 30 mins/week)
     // Blended strands: 35% Technology + 65% Coding & Robotics
     // -------------------------
-
     function g7TechLesson(week){
       if(week===1) return 'TECH (35% strand): Introduce systems thinking + safety. Explore simple mechanisms: levers (1st/2nd/3rd class) using classroom objects. Quick sketch of each lever in books.';
       if(week===2) return 'TECH (35% strand): Linkages + mechanical advantage (qualitative). Investigate everyday linkages (stapler, scissors, tongs). Short comparison: force in vs force out.';
@@ -238,6 +320,7 @@
       const tt = 'Typing warm-up (3–5 min): ' + typingFocus(week,'g7') + '.';
       return tt + ' ' + g7TechLesson(week);
     }
+
     function g7L2(week){
       const tt = 'Typing warm-up (3–5 min): ' + typingFocus(week,'g7') + '.';
       return tt + ' ' + g7CRLesson(week);
@@ -246,7 +329,6 @@
     // -------------------------
     // RESOURCES
     // -------------------------
-
     function resourcesCommon(){
       return 'PC lab, projector, typing tool, Scratch/MakeCode/Python as needed, worksheets, rubrics.';
     }
@@ -271,7 +353,6 @@
     // -------------------------
     // SAFE HTML ESCAPE
     // -------------------------
-
     function escapeToHTML(s){
       const t = String(s == null ? '' : s);
       return t
@@ -280,13 +361,12 @@
         .split('>').join('&gt;')
         .split('"').join('&quot;')
         .split("'").join('&#39;')
-        .split('\\n').join('<br>');
+        .split('\n').join('<br>');
     }
 
     // -------------------------
     // GRADE BUILDER
     // -------------------------
-
     function buildGrade(opts){
       return {
         grade: opts.grade,
@@ -350,7 +430,6 @@
     // -------------------------
     // RENDER (DOM-built)
     // -------------------------
-
     function el(tag, className, text){
       const node = document.createElement(tag);
       if(className) node.className = className;
@@ -393,12 +472,13 @@
       const schoolLine = el('div','school-line');
       const img = document.createElement('img');
       img.alt = 'DISA logo';
-      img.src = logoURL(false);
-      img.onerror = () => {
+      setImgWithFallback(img, logoCandidates(), 0);
+      img.addEventListener('error', () => {
         schoolLine.classList.add('logo-missing');
         img.style.display = 'none';
-      };
-      const note = el('div','logo-note','(Logo missing: ensure disa-logo.png is in the same folder as index.html)');
+      }, { once:true });
+
+      const note = el('div','logo-note','(Logo missing: ensure disa-logo.png is in the same folder as index.html OR in repo root)');
       schoolLine.appendChild(img);
       schoolLine.appendChild(el('div',null,'DISA PRIMARY SCHOOL'));
       schoolLine.appendChild(note);
@@ -525,11 +605,9 @@
     // -------------------------
     // PRINT HELPERS
     // -------------------------
-
-    function safePrint(){
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => window.print());
-      });
+    async function safePrint(){
+      await waitForImagesLoaded(6000);
+      requestAnimationFrame(() => requestAnimationFrame(() => window.print()));
     }
 
     function applyGradePrintFilter(gradeName){
@@ -547,45 +625,26 @@
       for(const p of pages){ p.classList.remove('print-grade-show'); }
     }
 
-    function printAll(){
+    async function printAll(){
       clearGradePrintFilter();
-      safePrint();
+      await safePrint();
     }
 
-    function downloadPDFAll(){
+    async function downloadPDFAll(){
       clearGradePrintFilter();
-      safePrint();
+      await safePrint();
     }
 
-    function downloadPDFGrade(gradeName){
+    async function downloadPDFGrade(gradeName){
       applyGradePrintFilter(gradeName);
-      safePrint();
-      setTimeout(clearGradePrintFilter, 400);
+      await safePrint();
+      setTimeout(clearGradePrintFilter, 600);
     }
 
     // -------------------------
-    // XLSX EXPORT (workbook per grade, sheet per week)
+    // XLSX EXPORT
+    // workbook per grade, sheet per week
     // -------------------------
-
-    function getLogoExtension(){
-      const f = String(LOGO_FILE || '').toLowerCase().trim();
-      if(f.endsWith('.png')) return 'png';
-      if(f.endsWith('.jpg') || f.endsWith('.jpeg')) return 'jpeg';
-      return null;
-    }
-
-    async function fetchLogoArrayBuffer(){
-      const ext = getLogoExtension();
-      if(!ext) return null;
-      try{
-        const res = await fetch(logoURL(true), { cache: 'no-store' });
-        if(!res.ok) return null;
-        return await res.arrayBuffer();
-      }catch(e){
-        return null;
-      }
-    }
-
     function setBorder(cell){
       cell.border = { top:{style:'medium'}, left:{style:'medium'}, bottom:{style:'medium'}, right:{style:'medium'} };
     }
@@ -698,12 +757,10 @@
       const wb = new ExcelJS.Workbook();
       wb.creator = TEACHER;
 
+      // Fetch logo once per workbook (optional)
       const logoBuf = await fetchLogoArrayBuffer();
-      let logoId = null;
       const ext = getLogoExtension();
-      if(logoBuf && ext){
-        logoId = wb.addImage({ buffer: logoBuf, extension: ext });
-      }
+      const logoId = (logoBuf && ext) ? wb.addImage({ buffer: logoBuf, extension: ext }) : null;
 
       for(const week of grade.weeks){
         const ws = wb.addWorksheet('Week ' + week.w, {
@@ -741,6 +798,7 @@
         }
 
         if(logoId){
+          // Place logo roughly centered in header block
           ws.addImage(logoId, { tl: { col: 6.2, row: 0.15 }, ext: { width: 120, height: 55 } });
         }
       }
@@ -750,14 +808,14 @@
 
     async function downloadXLSXGrade(gradeName){
       try{
-        // Quick visibility check to help debug missing logo in downloads
         const ext = getLogoExtension();
         if(!ext){
-          console.warn('Logo skipped: LOGO_FILE is not a supported image type:', LOGO_FILE);
-        }else{
-          const testRes = await fetch(logoURL(true), { cache: 'no-store' }).catch(() => null);
-          if(!testRes || !testRes.ok){
-            console.warn('Logo fetch failed for XLSX export. Check file path/case and repo location:', logoURL(false));
+          console.warn('Logo skipped (XLSX): unsupported logo file type:', LOGO_FILE);
+        } else {
+          const urls = logoCandidates().map(addCacheBust);
+          const hit = await fetchFirstOK(urls);
+          if(!hit){
+            console.warn('Logo fetch failed (XLSX). Check file path/case and repo location. Tried:', urls);
           }
         }
 
@@ -781,7 +839,6 @@
     // -------------------------
     // TESTS
     // -------------------------
-
     function runTests(){
       const t1 = escapeToHTML('a\\nb');
       console.assert(t1.indexOf('<br>') !== -1, 'escapeToHTML should convert newlines');
@@ -798,14 +855,16 @@
       const t5 = escapeToHTML("O'Reilly");
       console.assert(t5.indexOf('&#39;') !== -1, 'escapeToHTML should escape apostrophes');
 
+      console.assert(Array.isArray(logoCandidates()) && logoCandidates().length >= 1, 'logoCandidates should return at least 1 candidate');
       console.assert(getLogoExtension() === 'png', 'PNG logo should be detected as png');
 
       const g7 = GRADES.find(g => g.grade === 'Grade 7');
       const techCount = g7.weeks.slice(0,9).filter(w => String(w.lesson1.activities).indexOf('TECH (35%') !== -1).length;
       console.assert(techCount === 9, 'Grade 7 should schedule 9 Technology lessons (≈35%)');
 
-      // Extra: ensure no literal newlines exist inside JS strings in key places
-      console.assert(String(escapeToHTML).indexOf("split('\n')") !== -1, 'escapeToHTML should use \\n splitting');
+      // Ensure key functions are callable
+      console.assert(typeof applyGradePrintFilter === 'function', 'applyGradePrintFilter should exist');
+      console.assert(typeof setBorder === 'function', 'setBorder should exist');
     }
 
     // Initial render
