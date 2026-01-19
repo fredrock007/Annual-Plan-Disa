@@ -87,12 +87,33 @@
     // LOGO URL FALLBACKS
     // -------------------------
     function logoCandidates(){
+      // Works on GitHub Pages (fredrock007.github.io/Annual-Plan-Disa/)
+      // AND if you accidentally open the file via github.com (repo UI), we also try raw.githubusercontent.
       try{
         const hrefBase = new URL(LOGO_FILE, window.location.href).toString();
         const dir = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
         const dirBase = new URL(LOGO_FILE, dir).toString();
+
+        // GitHub Pages typically lives under /<repo>/, so /disa-logo.png is usually WRONG.
+        // We keep it as a last-ditch fallback.
         const rootBase = new URL('/' + LOGO_FILE, window.location.origin).toString();
-        return Array.from(new Set([hrefBase, dirBase, rootBase]));
+
+        const cands = [hrefBase, dirBase, rootBase];
+
+        // If opened on github.com, the relative URL returns an HTML page, not the raw image.
+        // Add a raw.githubusercontent.com candidate.
+        if(String(window.location.hostname).toLowerCase() === 'github.com'){
+          const parts = window.location.pathname.split('/').filter(Boolean);
+          // Expected: /<user>/<repo>/...
+          if(parts.length >= 2){
+            const user = parts[0];
+            const repo = parts[1];
+            const branch = 'main';
+            cands.push('https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + encodeURIComponent(LOGO_FILE));
+          }
+        }
+
+        return Array.from(new Set(cands));
       }catch(e){
         return [LOGO_FILE];
       }
