@@ -3,953 +3,706 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DISA Primary — Weekly Lesson Plan — Coding & Robotics (Term 1)</title>
+  <title>DISA Primary — Weekly Lesson Plan (Term 1) — Coding &amp; Robotics</title>
+
+  <!-- ExcelJS for .xlsx generation (merged-cells + styling + image support) -->
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
   <style>
-    :root{
-      --ink:#111;
-      --line:#1d1d1d;
-      --green:#93c47d; /* close to template */
-      --grey:#d9d9d9;
-      --paper:#fff;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      color:var(--ink);
-      background:var(--paper);
-    }
+    :root{--ink:#111;--line:#111;--paper:#fff;--green:#93c47d;--grey:#e6e6e6;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--paper);}
 
-    /* ===== Toolbar ===== */
-    .toolbar{
-      position:sticky; top:0; z-index:50;
-      background:#fff; border-bottom:1px solid #ccc;
-      padding:10px 12px;
-      display:flex; flex-wrap:wrap; gap:8px; align-items:center;
-    }
-    .toolbar button{ padding:8px 10px; cursor:pointer; border:1px solid #bbb; background:#f7f7f7; border-radius:6px; }
-    .toolbar .hint{ font-size:12px; color:#555; }
+    .toolbar{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #ccc;padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .toolbar button{padding:6px 10px;cursor:pointer}
+    .hint{font-size:12px;color:#444;margin-left:auto}
 
-    /* ===== Document ===== */
-    .doc{ max-width:1100px; margin:0 auto; padding:10px 12px 24px; }
+    .doc{max-width:1100px;margin:0 auto;padding:12px}
+    .print-page{page-break-after:always;margin:0;padding:0}
 
-    /* One page = one week */
-    .page{ page-break-after: always; margin:0; }
+    table.plan{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px}
+    table.plan td, table.plan th{border:1.6px solid var(--line);padding:6px 8px;vertical-align:top;word-wrap:break-word;white-space:pre-wrap}
 
-    /* Spreadsheet-like table */
-    table.plan{
-      width:100%;
-      border-collapse:collapse;
-      table-layout:fixed;
-      font-size:13px;
-    }
-    .plan td, .plan th{
-      border:1.4px solid var(--line);
-      vertical-align:top;
-      padding:8px;
-      white-space:pre-wrap;
-      word-wrap:break-word;
-    }
+    .top-left{font-weight:700;letter-spacing:.2px;line-height:1.2}
+    .top-mid{text-align:center;font-weight:700}
+    .top-right{text-align:right;font-weight:700}
 
-    .top-left{ font-weight:700; font-size:16px; line-height:1.15; }
-    .top-center{ text-align:center; font-weight:700; font-size:20px; }
-    .top-right{ text-align:center; font-weight:700; font-size:18px; }
+    .school-line{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .school-line img{height:46px;width:auto;display:block}
+    .logo-note{font-size:11px;color:#666;display:none}
+    .logo-missing .logo-note{display:block}
 
-    .green{ background:var(--green); color:#fff; font-weight:700; text-align:center; }
-    .section-head{ font-weight:700; text-align:center; }
-    .lesson-head{ font-weight:700; text-align:center; }
-    .grey{ background:var(--grey); font-weight:700; }
-
-    .side-vertical{ font-weight:700; text-align:center; }
-
-    .logo-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; }
-    .logo{ width:62px; height:auto; display:block; }
-    .school{ font-weight:700; }
-
-    .muted{ color:#444; font-weight:600; }
+    .green{background:var(--green);font-weight:700;color:#fff;text-align:center}
+    .section-title{font-weight:700;text-align:center}
+    .grey{background:var(--grey)}
+    .left-vertical{font-weight:700;text-align:center}
+    .left-label{font-weight:700;text-align:center}
+    .cell-small{font-size:13px}
 
     @media print{
-      .toolbar{ display:none !important; }
-      .doc{ max-width:none; margin:0; padding:0; }
-      .page{ page-break-after:always; }
-      @page{ margin:10mm; }
-
-      /* Grade-only print */
-      body.print-grade-active .page{ display:none !important; }
-      body.print-grade-active .page.print-grade-show{ display:block !important; }
-
-      /* Browser header/footer (date/time/url/page#) is controlled in the print dialog.
-         Disable “Headers and footers” for a clean PDF. */
+      .toolbar{display:none !important}
+      @page{margin:12mm}
+      body.print-grade-active .print-page{display:none !important}
+      body.print-grade-active .print-page.print-grade-show{display:block !important}
     }
   </style>
 </head>
 <body>
   <div class="toolbar">
-    <button type="button" onclick="window.print()">Print (All)</button>
-    <button type="button" onclick="downloadPDF()">Download PDF (All)</button>
+    <button type="button" onclick="printAll()">Print (All)</button>
+    <button type="button" onclick="downloadPDFAll()">Download PDF (All)</button>
 
-    <span style="width:12px"></span>
+    <span style="width:10px"></span>
 
-    <button type="button" onclick="downloadPDFGrade('Grade 5')">PDF — Grade 5</button>
-    <button type="button" onclick="downloadPDFGrade('Grade 6')">PDF — Grade 6</button>
-    <button type="button" onclick="downloadPDFGrade('Grade 7')">PDF — Grade 7</button>
+    <button type="button" onclick="downloadPDFGrade('Grade 5')">Download PDF — Grade 5</button>
+    <button type="button" onclick="downloadPDFGrade('Grade 6')">Download PDF — Grade 6</button>
+    <button type="button" onclick="downloadPDFGrade('Grade 7')">Download PDF — Grade 7</button>
 
-    <span style="width:12px"></span>
+    <span style="width:10px"></span>
 
-    <button type="button" onclick="downloadXLSXGrade('Grade 5')">XLSX — Grade 5</button>
-    <button type="button" onclick="downloadXLSXGrade('Grade 6')">XLSX — Grade 6</button>
-    <button type="button" onclick="downloadXLSXGrade('Grade 7')">XLSX — Grade 7</button>
+    <button type="button" onclick="downloadXLSXGrade('Grade 5')">Download XLSX — Grade 5</button>
+    <button type="button" onclick="downloadXLSXGrade('Grade 6')">Download XLSX — Grade 6</button>
+    <button type="button" onclick="downloadXLSXGrade('Grade 7')">Download XLSX — Grade 7</button>
 
-    <span class="hint">Tip: For a clean PDF, switch OFF “Headers and footers” in the print dialog. Logo loads from <b>logo.png</b> in your GitHub repo.</span>
+    <span class="hint">Clean PDF: in the print dialog, switch OFF “Headers and footers”.</span>
   </div>
 
   <div class="doc" id="doc"></div>
 
-  <!-- ExcelJS + FileSaver for styled XLSX (GitHub Pages-friendly) -->
-  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-
   <script>
-    'use strict';
+    // -------------------------
+    // CONFIG
+    // -------------------------
+    const SUBJECT = 'Coding & Robotics';
+    const TERM_LABEL = 'Term 1';
+    const TEACHER = 'Mr Samuels';
 
-    // =========================================================
-    // Expected behavior (as per your screenshot/template):
-    // - EXACT sheet layout like the template (green bars, merged cells, Lesson 1/2 blocks)
-    // - Option A confirmed: One workbook per grade, one sheet per week
-    // - Major strand: Touch typing appears EVERY WEEK (in lesson activities and/or homework)
-    // - Print: Each week is its own page; each grade starts on a new page
-    // =========================================================
+    // Fred: You told me this is the filename. A DOCX cannot be rendered as an <img>.
+    // Expected behavior question:
+    //  - Do you want the logo to actually appear? If yes, export the logo to PNG/JPG and change LOGO_FILE.
+    //  - If you keep the DOCX, the page will show the "logo skipped" note but will not crash.
+    // Logo file placed in the same folder as this page in your GitHub Pages repo
+    // (e.g., repo root). Must be an image (png/jpg).
+    const LOGO_FILE = 'disa-logo.png';
 
-    const TERM_LABEL = 'Term 1, 2026';
-    const SUBJECT_LABEL = 'Coding & Robotics';
-    const TEACHER_LABEL = 'Mr Samuels';
+    // -------------------------
+    // DATA: Touch Typing is a major strand (every week)
+    // Term 1: Wed 14 Jan 2026 – Fri 10 Apr 2026
+    // SA Public holidays impacting school days:
+    // - Good Friday: Fri 3 Apr
+    // - Family Day: Mon 6 Apr
+    // -------------------------
 
-    // Public holidays (SA) inside Term 1 window shown in your planning:
-    const HOLIDAYS = {
-      '2026-04-03': 'Good Friday',
-      '2026-04-06': 'Family Day'
+    const TT = {
+      g5: [
+        'Posture + finger placement (home row)',
+        'Accuracy first (no looking)',
+        'Common letter patterns + spacing',
+        'Short sentences → short paragraphs',
+        'End-term goal: consistent accuracy with basic paragraphs'
+      ],
+      g6: [
+        'Home row automaticity + reach keys',
+        'Accuracy + speed targets (WPM)',
+        'Paragraph typing (editing discipline)',
+        'Typing for productivity (docs + sheets)',
+        'End-term goal: steady WPM with clean formatting'
+      ],
+      g7: [
+        'Speed + accuracy targets (WPM + error-rate)',
+        'Typing for coding (symbols, brackets, indentation)',
+        'Document production (headings, bullets)',
+        'Timed typing + exam readiness',
+        'End-term goal: reliable typing under time pressure'
+      ]
     };
 
-    // Utility: safe HTML
-    function esc(s){
-      return String(s)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/\n/g,'<br>');
-    }
-
-    // =========================================================
-    // CAPS-aligned weekly plan per grade
-    // (Structured exactly like your template fields)
-    // =========================================================
-
-    function typingStrand(grade, week){
-      // Touch typing is a major component: present weekly with progression.
-      if(grade === 'Grade 5'){
-        if(week <= 2) return {focus:'Home row + posture + accuracy', hw:'10 minutes home-row practice (accuracy focus).'};
-        if(week <= 5) return {focus:'Common letter patterns + correct fingers', hw:'10 minutes practice: common words + correct fingers.'};
-        if(week <= 9) return {focus:'Short paragraphs + punctuation (accuracy)', hw:'Type a short paragraph (5–7 lines) with punctuation.'};
-        return {focus:'Fluency + neat digital presentation', hw:'Typing revision: 10 minutes + correct errors (backspace discipline).'};
-      }
-      if(grade === 'Grade 6'){
-        if(week <= 2) return {focus:'Baseline + home-row revision + speed targets', hw:'10 minutes timed typing; record WPM + accuracy.'};
-        if(week <= 5) return {focus:'Speed + accuracy + paragraphing', hw:'Type 8–10 lines; focus on spacing + capitals.'};
-        if(week <= 9) return {focus:'Editing skills (copy, paste, select, undo)', hw:'Practice editing: copy/paste, undo/redo, select words.'};
-        return {focus:'Assessment readiness (WPM + accuracy)', hw:'Timed test practice: 3 × 3 minutes; record best WPM.'};
-      }
-      // Grade 7
-      if(week <= 2) return {focus:'Baseline WPM + accuracy + file naming', hw:'Timed typing 3 min; record WPM + accuracy in portfolio.'};
-      if(week <= 5) return {focus:'Fluency + coding-friendly typing (symbols)', hw:'Practice typing brackets, quotes, colons, operators.'};
-      if(week <= 9) return {focus:'Sustained typing + editing + formatting', hw:'Type a short report (10–12 lines); apply basic formatting.'};
-      return {focus:'Exam readiness: accuracy under time', hw:'Typing test: 5 minutes; reflect on errors + fix habits.'};
-    }
-
-    const PLAN = [
-      {
-        grade: 'Grade 5',
-        timetable: '2 × 60-minute lessons per week',
-        weeks: [
-          // Week 1 starts Wed 14 Jan (short week)
-          {
-            week: 1,
-            dates: '14 - 16 January',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Digital Foundations: Windows login + responsible lab use',
-              introduction: 'Welcome, lab rules, device care, why passwords matter.',
-              activities: 'Create learner folder; practice login/logout; save a file with correct name.',
-              check: 'Quick checklist: correct login, correct folder name, file saved.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: posture + home row (accuracy)',
-              introduction: 'Demonstrate finger placement + posture.',
-              activities: 'Home-row drills; short word practice; accuracy tracking.',
-              check: 'Exit ticket: 2-minute typing test (accuracy %).',
-            },
-            integration: 'Life Skills: digital citizenship; English: accurate spelling when typing.',
-            resources: 'Computers, projector, lab rules poster, typing sheets.',
-            homework: () => typingStrand('Grade 5', 1).hw
-          },
-          {
-            week: 2,
-            dates: '19 - 23 January',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Application Skills: Presentations (basic slides)',
-              introduction: 'Show slide layout + title/content.',
-              activities: 'Create 2-slide presentation about “My School”; insert shape; format title.',
-              check: 'Peer check: 2 slides, readable text, saved correctly.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: home row fluency',
-              introduction: 'Warm-up + reminder: eyes on screen, not keyboard.',
-              activities: 'Timed drills; common words; improve accuracy.',
-              check: 'Record WPM + accuracy in portfolio.',
-            },
-            integration: 'English HL: headings + key points; Art: layout and spacing.',
-            resources: 'PowerPoint/Slides, typing tool, example slides.',
-            homework: () => typingStrand('Grade 5', 2).hw
-          },
-          {
-            week: 3,
-            dates: '26 - 30 January',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Robotics Skills: CAD (2D tools)',
-              introduction: 'CAD interface and safety: save versions.',
-              activities: 'Use Line/Circle/Rectangle to draw a simple “robot badge”.',
-              check: 'Teacher check: correct tools used + file saved.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: common patterns',
-              introduction: 'Warm-up + finger discipline.',
-              activities: 'Common bigrams/trigrams; short sentences.',
-              check: '2-minute test; aim accuracy > 90%.',
-            },
-            integration: 'Maths: shapes; Creative Arts: design of badge.',
-            resources: 'Tinkercad/FreeCAD, typing tool, worksheets.',
-            homework: () => typingStrand('Grade 5', 3).hw
-          },
-          {
-            week: 4,
-            dates: '2 - 6 February',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Algorithms: variables + inputs (Scratch)',
-              introduction: 'What is an algorithm? Inputs/outputs.',
-              activities: 'Scratch: ask name + display greeting; save project.',
-              check: 'Demo to teacher: input works; output displays.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing + digital writing',
-              introduction: 'Warm-up; focus on punctuation.',
-              activities: 'Type short paragraph; correct errors; save as .docx.',
-              check: 'Checklist: capitals, full stops, spacing.',
-            },
-            integration: 'English: paragraph writing; Life Skills: perseverance.',
-            resources: 'Scratch, word processor, typing tool.',
-            homework: () => typingStrand('Grade 5', 4).hw
-          },
-          {
-            week: 5,
-            dates: '9 - 13 February',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Robotics: IPO + microcontroller overview',
-              introduction: 'Identify input/output devices; discuss IPO.',
-              activities: 'Label microcontroller diagram; plan a simple output (LED).',
-              check: 'Q&A: identify IPO in a real example.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: fluency + accuracy',
-              introduction: 'Warm-up + focus on correct fingers.',
-              activities: 'Timed drills; type a short instruction list neatly.',
-              check: 'Teacher spot-check: neat layout + spelling.',
-            },
-            integration: 'NST: simple circuits concept; English: instructional writing.',
-            resources: 'micro:bit/Arduino kit (demo), worksheets.',
-            homework: () => typingStrand('Grade 5', 5).hw
-          },
-          {
-            week: 6,
-            dates: '16 - 20 February',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Robotics: LED output (sequence)',
-              introduction: 'Safety: components + connections.',
-              activities: 'MakeCode: blink pattern; change timing; save link.',
-              check: 'Functional demo: blink pattern matches task.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: paragraph + editing',
-              introduction: 'Warm-up; editing shortcuts.',
-              activities: 'Type paragraph; use backspace carefully; fix errors.',
-              check: 'Accuracy target + saved document.',
-            },
-            integration: 'English: editing; Maths: timing numbers.',
-            resources: 'Kits, MakeCode, typing tool.',
-            homework: () => typingStrand('Grade 5', 6).hw
-          },
-          {
-            week: 7,
-            dates: '23 - 27 February',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'PAT: investigation + problem statement',
-              introduction: 'What is a problem statement?',
-              activities: 'Choose problem; brainstorm; sketch; list resources.',
-              check: 'Submit investigation template.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: longer text',
-              introduction: 'Warm-up.',
-              activities: 'Type PAT problem statement neatly (5–7 lines).',
-              check: 'Teacher checks structure + spelling.',
-            },
-            integration: 'English: clarity and structure; Life Skills: teamwork.',
-            resources: 'PAT templates, typing tool, devices.',
-            homework: () => typingStrand('Grade 5', 7).hw
-          },
-          {
-            week: 8,
-            dates: '2 - 6 March',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'PAT: design & make',
-              introduction: 'Plan before build.',
-              activities: 'Build solution (Scratch or microcontroller).',
-              check: 'Progress checklist + evidence screenshot.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: accuracy challenge',
-              introduction: 'Warm-up.',
-              activities: 'Timed accuracy challenge; fix top 5 recurring mistakes.',
-              check: 'Record results in portfolio.',
-            },
-            integration: 'Maths: measure/compare results; English: reflection sentence.',
-            resources: 'Scratch/MakeCode, kits, checklists.',
-            homework: () => typingStrand('Grade 5', 8).hw
-          },
-          {
-            week: 9,
-            dates: '9 - 13 March',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'PAT: evaluation',
-              introduction: 'Why testing matters.',
-              activities: 'Peer test; collect feedback; improve.',
-              check: 'Completed feedback form.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: punctuation + neatness',
-              introduction: 'Warm-up.',
-              activities: 'Type evaluation notes; use bullet points.',
-              check: 'Teacher checks bullets and spacing.',
-            },
-            integration: 'English: bullet points; Life Skills: giving feedback respectfully.',
-            resources: 'Forms, typing tool, devices.',
-            homework: () => typingStrand('Grade 5', 9).hw
-          },
-          {
-            week: 10,
-            dates: '16 - 20 March',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'PAT: present',
-              introduction: 'How to explain choices.',
-              activities: 'Short demo + explain process.',
-              check: 'Rubric scoring.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: reflection writing',
-              introduction: 'Warm-up.',
-              activities: 'Type reflection paragraph; save to portfolio.',
-              check: 'Checklist: topic sentence + 3 points.',
-            },
-            integration: 'English: oral + writing; Life Skills: confidence.',
-            resources: 'Projector, rubrics, typing tool.',
-            homework: () => typingStrand('Grade 5', 10).hw
-          },
-          {
-            week: 11,
-            dates: '23 - 27 March',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Consolidation: catch-up + extension',
-              introduction: 'Identify gaps.',
-              activities: 'Finish PAT; add one feature if complete.',
-              check: 'Teacher sign-off list.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: revision',
-              introduction: 'Warm-up.',
-              activities: 'Typing drills + error correction.',
-              check: 'Accuracy goal set.',
-            },
-            integration: 'Life Skills: goal setting.',
-            resources: 'Devices, checklists, typing tool.',
-            homework: () => typingStrand('Grade 5', 11).hw
-          },
-          {
-            week: 12,
-            dates: '30 March - 3 April (Fri 3 Apr – Good Friday: no school)',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'Revision: typing + coding drills',
-              introduction: 'Short week note: Good Friday holiday.',
-              activities: 'Typing accuracy session + Scratch review (IF + variables).',
-              check: 'Mini-quiz + saved typing results.',
-            },
-            lesson2: {
-              capsTopic: 'Public Holiday placeholder',
-              introduction: 'Good Friday (Fri 3 April) — no school.',
-              activities: 'No lesson.',
-              check: 'N/A',
-            },
-            integration: 'Revision skills.',
-            resources: 'Typing tool, Scratch.',
-            homework: () => typingStrand('Grade 5', 12).hw
-          },
-          {
-            week: 13,
-            dates: '6 - 10 April (Mon 6 Apr – Family Day: no school)',
-            term: TERM_LABEL,
-            lesson1: {
-              capsTopic: 'End-of-term: showcase',
-              introduction: 'Short week note: Family Day holiday.',
-              activities: 'Showcase gallery walk + peer review.',
-              check: 'Peer review slips.',
-            },
-            lesson2: {
-              capsTopic: 'Touch Typing: final benchmark',
-              introduction: 'Warm-up.',
-              activities: 'Final benchmark test; compare to Week 1 baseline.',
-              check: 'Record WPM + accuracy; set Term 2 target.',
-            },
-            integration: 'Maths: compare numbers (progress).',
-            resources: 'Portfolios, typing tool.',
-            homework: () => typingStrand('Grade 5', 13).hw
-          },
-        ]
-      },
-
-      // ===== Grade 6 =====
-      {
-        grade: 'Grade 6',
-        timetable: '2 × 60-minute lessons per week',
-        weeks: Array.from({length:13}, (_,i) => i+1).map(w => {
-          const t = typingStrand('Grade 6', w);
-          const base = {
-            week: w,
-            term: TERM_LABEL,
-            dates: [
-              '14 - 16 January','19 - 23 January','26 - 30 January','2 - 6 February','9 - 13 February','16 - 20 February','23 - 27 February','2 - 6 March','9 - 13 March','16 - 20 March','23 - 27 March','30 March - 3 April (Fri 3 Apr – Good Friday: no school)','6 - 10 April (Mon 6 Apr – Family Day: no school)'
-            ][w-1],
-            lesson1:{capsTopic:'', introduction:'', activities:'', check:''},
-            lesson2:{capsTopic:'Touch Typing (major strand): ' + t.focus, introduction:'Warm-up + target setting.', activities:'Timed typing + accuracy; record evidence in portfolio.', check:'WPM + accuracy recorded.'},
-            integration:'English: writing + editing; Life Skills: perseverance.',
-            resources:'Computers, typing tool, worksheets.',
-            homework: () => t.hw
-          };
-
-          // CAPS progression blocks for Grade 6
-          if(w===1){
-            base.lesson1 = { capsTopic:'Internet & E-communications + Digital Foundations', introduction:'Responsible use; passwords; email overview.', activities:'Login routine; internet rules poster; safe use discussion.', check:'Quick quiz: rules + password checklist.' };
-          } else if(w===2){
-            base.lesson1 = { capsTopic:'Application Skills: Spreadsheets (UI + data)', introduction:'Rows/columns/cells; data entry.', activities:'Enter dataset; format cells; align; borders.', check:'Teacher checks formatting + save name.' };
-          } else if(w===3){
-            base.lesson1 = { capsTopic:'Application Skills: CAD accuracy', introduction:'Review tools; saving versions.', activities:'Copy a 2D drawing; annotate if available.', check:'Accuracy checklist.' };
-          } else if(w===4){
-            base.lesson1 = { capsTopic:'Algorithms: conditions + collision (Scratch)', introduction:'Events + variables recap.', activities:'Build mini-game; use touching + IF THEN.', check:'Demo: collision triggers response.' };
-          } else if(w===5){
-            base.lesson1 = { capsTopic:'Robotics: outputs sequence + input device', introduction:'IPO; outputs vs inputs.', activities:'LED sequence; add button control.', check:'Functional test + photo evidence.' };
-          } else if(w===6){
-            base.lesson1 = { capsTopic:'Robotics: DC motor control', introduction:'Motor safety; speed concept.', activities:'Connect/control motor; use variable for speed.', check:'Teacher sign-off + reflection line.' };
-          } else if(w===7){
-            base.lesson1 = { capsTopic:'PAT: Investigation + Design', introduction:'Choose project option.', activities:'Investigate; sketches; materials list.', check:'Submit template.' };
-          } else if(w===8){
-            base.lesson1 = { capsTopic:'PAT: Design & Make', introduction:'Build plan.', activities:'Build prototype + basic code.', check:'Checkpoint rubric.' };
-          } else if(w===9){
-            base.lesson1 = { capsTopic:'PAT: Evaluation', introduction:'Test against requirements.', activities:'Peer testing; improvements.', check:'Completed evaluation sheet.' };
-          } else if(w===10){
-            base.lesson1 = { capsTopic:'Formal Assessment', introduction:'Assessment briefing.', activities:'Final PAT submission + short test.', check:'Marked rubric + test score.' };
-          } else if(w===11){
-            base.lesson1 = { capsTopic:'Consolidation + Extension', introduction:'Catch-up & stretch.', activities:'Remedial support; add feature if finished.', check:'Teacher checklist.' };
-          } else if(w===12){
-            base.lesson1 = { capsTopic:'Revision (short week)', introduction:'Good Friday note.', activities:'Spreadsheet recap + coding recap.', check:'Mini quiz.' };
-            base.lesson2 = { capsTopic:'Public Holiday placeholder', introduction:'Good Friday (Fri 3 April) — no school.', activities:'No lesson.', check:'N/A' };
-          } else if(w===13){
-            base.lesson1 = { capsTopic:'Wrap-up (short week)', introduction:'Family Day note.', activities:'Showcase + peer awards + reflection.', check:'Reflection submitted.' };
-            // keep typing benchmark
-          }
-
-          // Bring in typing as a visible major component in Lesson 1 too (where appropriate)
-          if([2,3,4,5,6,9,10,11].includes(w)){
-            base.lesson1.activities += `\n\nTouch Typing link: 8–10 minutes skill drill (focus: ${t.focus}).`;
-          }
-
-          base.resources = 'Computers, projector/smartboard, worksheets, typing tool, (kits as needed).';
-          return base;
-        })
-      },
-
-      // ===== Grade 7 =====
-      {
-        grade: 'Grade 7',
-        timetable: '2 × 30-minute lessons per week',
-        weeks: Array.from({length:13}, (_,i) => i+1).map(w => {
-          const t = typingStrand('Grade 7', w);
-          const base = {
-            week: w,
-            term: TERM_LABEL,
-            dates: [
-              '14 - 16 January','19 - 23 January','26 - 30 January','2 - 6 February','9 - 13 February','16 - 20 February','23 - 27 February','2 - 6 March','9 - 13 March','16 - 20 March','23 - 27 March','30 March - 3 April (Fri 3 Apr – Good Friday: no school)','6 - 10 April (Mon 6 Apr – Family Day: no school)'
-            ][w-1],
-            lesson1:{capsTopic:'', introduction:'', activities:'', check:''},
-            lesson2:{capsTopic:'Touch Typing (major strand): ' + t.focus, introduction:'Warm-up + goal for the week.', activities:'Timed typing + accuracy; include symbols if coding week; record evidence.', check:'WPM + accuracy logged in folder.'},
-            integration:'Maths: logic and comparisons; English: clear technical writing.',
-            resources:'Computers, Thonny/Python, typing tool, worksheets, kits as needed.',
-            homework: () => t.hw
-          };
-
-          if(w===1){
-            base.lesson1 = { capsTopic:'Digital Foundations + Internet & E-communications', introduction:'Lab rules + portfolio folder structure.', activities:'Create folder structure; file naming; login/logout routine.', check:'Folder check + file naming check.' };
-          } else if(w===2){
-            base.lesson1 = { capsTopic:'Web basics: HTML/CSS refresh', introduction:'HTML structure + CSS selectors.', activities:'Create simple page; style text; save and open in browser.', check:'Page displays correctly.' };
-            base.lesson1.activities += `\nTouch Typing link: practice typing HTML symbols (< > / " ' : ;).`;
-          } else if(w===3){
-            base.lesson1 = { capsTopic:'Logic + Truth tables', introduction:'Flow diagrams + data types recap.', activities:'Complete truth tables; combine two gates; explain outputs.', check:'Short quiz: truth table completion.' };
-          } else if(w===4){
-            base.lesson1 = { capsTopic:'Python: relational operators + IF/ELIF', introduction:'Comparisons and indentation rules.', activities:'Write small programs using >,<,== and IF/ELIF.', check:'Run code successfully; explain output.' };
-            base.lesson2.activities += `\nSymbols practice: () [] {} : == != >= <=`;
-          } else if(w===5){
-            base.lesson1 = { capsTopic:'Python: boolean operators + IF/ELSE', introduction:'AND/OR/NOT; decision structures.', activities:'Mini program: eligibility checker with AND/OR/NOT.', check:'Program matches test cases.' };
-            base.lesson2.activities += `\nSymbols practice: and/or/not, quotes, colons.`;
-          } else if(w===6){
-            base.lesson1 = { capsTopic:'CAD mechanical components', introduction:'2D/3D recap + saving evidence.', activities:'Draw simple linkage/gear concept; label parts.', check:'Screenshot evidence saved.' };
-          } else if(w===7){
-            base.lesson1 = { capsTopic:'Sensors + outputs', introduction:'IPO recap + breadboard safety.', activities:'Ultrasonic sensor triggers buzzer/LED.', check:'Functional demo.' };
-          } else if(w===8){
-            base.lesson1 = { capsTopic:'Extend sensor project', introduction:'Improve logic with variables.', activities:'Add second output; adjust threshold; document changes.', check:'Project log completed.' };
-          } else if(w===9){
-            base.lesson1 = { capsTopic:'Mini PAT (Term 1)', introduction:'Choose option: mini-game OR sensor alarm.', activities:'Build + test; gather screenshots/evidence.', check:'Evidence pack submitted.' };
-          } else if(w===10){
-            base.lesson1 = { capsTopic:'Formal task: submission + short quiz', introduction:'Assessment expectations.', activities:'Final submission + quiz (operators/IF/safety).', check:'Marked quiz.' };
-          } else if(w===11){
-            base.lesson1 = { capsTopic:'Catch-up + Extension', introduction:'Fix gaps and improve.', activities:'Complete missing evidence; add one extension feature.', check:'Teacher sign-off.' };
-          } else if(w===12){
-            base.lesson1 = { capsTopic:'Revision (short week)', introduction:'Good Friday note.', activities:'Typing + file management + coding drills.', check:'Typing evidence + drill results.' };
-            base.lesson2 = { capsTopic:'Public Holiday placeholder', introduction:'Good Friday (Fri 3 April) — no school.', activities:'No lesson.', check:'N/A' };
-          } else if(w===13){
-            base.lesson1 = { capsTopic:'Wrap-up (short week)', introduction:'Family Day note.', activities:'Showcase + reflection + Term 2 preview.', check:'Reflection saved.' };
-          }
-
-          // Make typing visible as a major component inside lesson 1 frequently (since grade 7 has short periods)
-          if([1,2,4,5,9,10,11].includes(w)){
-            base.lesson1.activities += `\n\nTouch Typing (major): 6–8 min drill focusing on ${t.focus}.`;
-          }
-
-          return base;
-        })
-      }
+    const WEEKS = [
+      { w:1,  dates:'14–16 January (Wed–Fri)' },
+      { w:2,  dates:'19–23 January' },
+      { w:3,  dates:'26–30 January' },
+      { w:4,  dates:'2–6 February' },
+      { w:5,  dates:'9–13 February' },
+      { w:6,  dates:'16–20 February' },
+      { w:7,  dates:'23–27 February' },
+      { w:8,  dates:'2–6 March' },
+      { w:9,  dates:'9–13 March' },
+      { w:10, dates:'16–20 March' },
+      { w:11, dates:'23–27 March' },
+      { w:12, dates:'30 March–3 April (Good Friday: Fri 3 Apr)', holiday:'Good Friday (Fri 3 April) – no school' },
+      { w:13, dates:'6–10 April (Family Day: Mon 6 Apr)', holiday:'Family Day (Mon 6 April) – no school' }
     ];
 
-    // =========================================================
-    // HTML Render (one page per week; matches template blocks)
-    // =========================================================
+    function typingFocus(week, gradeKey){
+      const arr = TT[gradeKey];
+      const idx = Math.min(arr.length - 1, Math.floor((week - 1) / 3));
+      return arr[idx];
+    }
+
+    function typingIntro(week, gradeKey, short){
+      const focus = typingFocus(week, gradeKey);
+      return short
+        ? 'Touch Typing Focus: ' + focus + ' (short warm-up + target)'
+        : 'Touch Typing Focus: ' + focus + ' (baseline/target + technique)';
+    }
+
+    // Grade 5 (2 x 60 mins)
+    function g5L1(week){
+      if(week===1) return 'Windows login routine + file naming + touch typing: posture + home row accuracy drills.';
+      if(week<=4) return 'Typing warm-up + application skills: basic formatting + save work neatly (evidence in folder).';
+      if(week<=6) return 'Typing warm-up + Scratch intro: events + variables; build a tiny interactive scene.';
+      if(week<=8) return 'Typing warm-up + robotics basics: IPO + simple LED/buzzer patterns (MakeCode).';
+      if(week<=10) return 'Typing warm-up + mini PAT: choose a simple problem + plan + start building.';
+      if(week<=11) return 'Typing warm-up + mini PAT build + add one new feature.';
+      return 'Typing warm-up + revision/catch-up with clear evidence in portfolio.';
+    }
+    function g5L2(week){
+      if(week===1) return 'Typing game (accuracy) + digital citizenship: safe passwords + device care.';
+      if(week<=4) return 'Typing sentences + presentation task: 2–3 slides with headings, images, neat layout.';
+      if(week<=6) return 'Typing paragraphs + Scratch task: IF decisions + short rubric.';
+      if(week<=8) return 'Typing paragraphs + MakeCode: LED sequence or buzzer alarm (save link as evidence).';
+      if(week<=10) return 'Typing paragraphs + mini PAT continue + testing checklist.';
+      if(week<=11) return 'Typing timed challenge + mini showcase + peer feedback.';
+      return 'Typing final check + end-of-term showcase + reflection.';
+    }
+
+    // Grade 6 (2 x 60 mins)
+    function g6L1(week){
+      if(week===1) return 'Windows login mastery + typing baseline + rules for appropriate online use.';
+      if(week<=3) return 'Typing warm-up + spreadsheets: data entry, formatting, clean table.';
+      if(week<=4) return 'Typing warm-up + CAD accuracy task: copy a 2D drawing and save versions.';
+      if(week<=6) return 'Typing warm-up + Scratch: conditions + collision logic; build a simple game mechanic.';
+      if(week<=8) return 'Typing warm-up + robotics: outputs + inputs + DC motor intro (safety + control).';
+      if(week<=10) return 'Typing warm-up + PAT: investigation + design + build prototype.';
+      return 'Typing warm-up + revision/catch-up + extension feature.';
+    }
+    function g6L2(week){
+      if(week===1) return 'Typing accuracy + e-communication basics (if available) + cyber safety.';
+      if(week<=3) return 'Typing paragraphs + spreadsheet: chart task + short interpretation questions.';
+      if(week<=4) return 'Typing paragraphs + CAD: label key features + export screenshot evidence.';
+      if(week<=6) return 'Typing timed + Scratch: variables + IF for scoring or lives.';
+      if(week<=8) return 'Typing timed + robotics: motor speed control using variables; simple test plan.';
+      if(week<=10) return 'Typing timed + PAT: evaluate against requirements + improve + submit evidence.';
+      return 'Typing final + reflection + Term 2 preview.';
+    }
+
+    // Grade 7 (2 x 30 mins)
+    function g7L1(week){
+      if(week===1) return 'Portfolio folders + typing baseline (WPM + accuracy) + symbols needed for coding.';
+      if(week<=2) return 'Typing warm-up + HTML structure refresh (tags, links, images) for neat page output.';
+      if(week<=3) return 'Typing warm-up + logic: flow diagrams + intro truth tables.';
+      if(week<=5) return 'Typing warm-up + Python: operators + IF / ELSE decision structures.';
+      if(week<=8) return 'Typing warm-up + robotics: sensors + outputs; threshold logic + testing.';
+      if(week<=10) return 'Typing warm-up + mini PAT: coding mini-game or sensor alarm (evidence + rubric).';
+      return 'Typing warm-up + catch-up and revision + strengthen weak concepts.';
+    }
+    function g7L2(week){
+      if(week===1) return 'Typing targets + digital citizenship recap + file management routines.';
+      if(week<=2) return 'Typing paragraphs + CSS basics (classes, text formatting) for clean web pages.';
+      if(week<=3) return 'Typing + truth tables (AND/OR/NOT) + short quiz.';
+      if(week<=5) return 'Typing + Python drills: IF + boolean operators; tiny decision program.';
+      if(week<=8) return 'Typing + sensor project extension: second output or improved logic.';
+      if(week<=10) return 'Typing + mini PAT finalise + short test (operators, IF, safety).';
+      return 'Typing final + showcase + reflection (short lessons, tight evidence).';
+    }
+
+    function checkShort(){ return 'Exit ticket: evidence (screenshot/link) + 1 sentence reflection.'; }
+    function checkLong(){ return 'Checklist: login, file naming, typing accuracy, task completion.'; }
+
+    function resourcesCommon(){
+      return 'PC lab, projector, typing tool, Scratch/MakeCode/Python as needed, worksheets, rubrics.';
+    }
+
+    function homeworkBase(mins){
+      return mins + ' min typing practice + finish any incomplete class task.';
+    }
+
+    // Safe HTML escape WITHOUT regex literals (robust against copy/paste corruption)
+    function escapeToHTML(s){
+      const t = String(s == null ? '' : s);
+      return t
+        .split('&').join('&amp;')
+        .split('<').join('&lt;')
+        .split('>').join('&gt;')
+        .split('"').join('&quot;')
+        .split("'").join('&#39;')
+        .split('\n').join('<br>');
+    }
+
+    function buildGrade(grade, timetable, gradeKey, capsTopic, l1Fn, l2Fn, hwMins){
+      return {
+        grade,
+        timetable,
+        gradeKey,
+        capsTopic,
+        weeks: WEEKS.map(w => ({
+          w: w.w,
+          dates: w.dates,
+          term: TERM_LABEL,
+          lesson1: { intro: typingIntro(w.w, gradeKey, false), activities: l1Fn(w.w), check: checkLong() },
+          lesson2: { intro: typingIntro(w.w, gradeKey, true),  activities: l2Fn(w.w), check: checkShort() },
+          integration: w.holiday ? 'Public Holiday: ' + w.holiday : 'Integration: language (instructions), maths (logic), digital citizenship, relevant subjects.',
+          resources: resourcesCommon(),
+          homework: w.holiday ? homeworkBase(hwMins) + ' (Note: ' + w.holiday + ')' : homeworkBase(hwMins)
+        }))
+      };
+    }
+
+    const GRADES = [
+      buildGrade('Grade 5','2 × 60-minute lessons per week','g5','Touch Typing (core) + Digital Foundations / Application Skills / Scratch / Robotics', g5L1, g5L2, '5–10'),
+      buildGrade('Grade 6','2 × 60-minute lessons per week','g6','Touch Typing (core) + E-communication / Spreadsheets / CAD / Scratch / Robotics', g6L1, g6L2, '10'),
+      buildGrade('Grade 7','2 × 30-minute lessons per week','g7','Touch Typing (core) + HTML/CSS / Logic / Python / Robotics', g7L1, g7L2, '5–10')
+    ];
+
+    // -------------------------
+    // RENDER (DOM-built to avoid innerHTML quoting bugs)
+    // -------------------------
+
+    function el(tag, className, text){
+      const node = document.createElement(tag);
+      if(className) node.className = className;
+      if(text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function td(colspan, className, text){
+      const cell = document.createElement('td');
+      if(colspan) cell.colSpan = colspan;
+      if(className) cell.className = className;
+      if(text !== undefined) cell.textContent = text;
+      return cell;
+    }
+
+    function addColgroup(tbl){
+      const colgroup = document.createElement('colgroup');
+      for(let i=0;i<14;i++){
+        const c = document.createElement('col');
+        c.style.width = '8%';
+        colgroup.appendChild(c);
+      }
+      tbl.appendChild(colgroup);
+    }
+
+    function setHTML(cell, html){
+      // html comes from escapeToHTML, so safe
+      cell.innerHTML = html;
+    }
+
+    function buildPlanTable(grade, week){
+      const tbl = document.createElement('table');
+      tbl.className = 'plan';
+      addColgroup(tbl);
+
+      // Row 1
+      let tr = document.createElement('tr');
+      tr.appendChild(td(4,'top-left','INTERMEDIATE PHASE\nWEEKLY LESSON PLAN'));
+
+      const mid = td(6,'top-mid');
+      const schoolLine = el('div','school-line');
+      const img = document.createElement('img');
+      img.alt = 'DISA logo';
+      img.src = LOGO_FILE;
+      img.onerror = () => {
+        schoolLine.classList.add('logo-missing');
+        img.style.display = 'none';
+      };
+      const note = el('div','logo-note','(Logo skipped: export to PNG/JPG and update LOGO_FILE)');
+      schoolLine.appendChild(img);
+      schoolLine.appendChild(el('div',null,'DISA PRIMARY SCHOOL'));
+      schoolLine.appendChild(note);
+      mid.appendChild(schoolLine);
+
+      tr.appendChild(mid);
+      tr.appendChild(td(4,'top-right','SUBJECT:'));
+      tbl.appendChild(tr);
+
+      // Row 2 (green headings)
+      tr = document.createElement('tr');
+      tr.appendChild(td(2,'green','Term:'));
+      tr.appendChild(td(2,'green','Week:'));
+      tr.appendChild(td(6,'green','Date:'));
+      tr.appendChild(td(2,'green','Grade:'));
+      tr.appendChild(td(2,'green','Teacher:'));
+      tbl.appendChild(tr);
+
+      // Row 3 (values)
+      tr = document.createElement('tr');
+      const termCell = td(2,'cell-small'); setHTML(termCell, escapeToHTML(week.term));
+      tr.appendChild(termCell);
+      tr.appendChild(td(2,'cell-small','Week ' + week.w));
+      const dateCell = td(6,'cell-small'); setHTML(dateCell, escapeToHTML(week.dates));
+      tr.appendChild(dateCell);
+      const gCell = td(2,'cell-small'); setHTML(gCell, escapeToHTML(grade.grade));
+      tr.appendChild(gCell);
+      const tCell = td(2,'cell-small'); setHTML(tCell, escapeToHTML(TEACHER));
+      tr.appendChild(tCell);
+      tbl.appendChild(tr);
+
+      // Row 4 (lesson headers)
+      tr = document.createElement('tr');
+      tr.appendChild(td(2,null,''));
+      tr.appendChild(td(5,'section-title','LESSON 1'));
+      tr.appendChild(td(7,'section-title','LESSON 2'));
+      tbl.appendChild(tr);
+
+      // Row 5 CAPS Topic
+      tr = document.createElement('tr');
+      const leftVert = td(1,'left-vertical','TEACHING AND\nLEARNING\nACTIVITIES');
+      leftVert.rowSpan = 4;
+      tr.appendChild(leftVert);
+      tr.appendChild(td(1,'left-label','CAPS Topic'));
+
+      const caps1 = td(5,'grey');
+      setHTML(caps1, escapeToHTML(grade.capsTopic) + '<br><b>' + escapeToHTML(grade.grade) + '</b> — ' + escapeToHTML(grade.timetable));
+      tr.appendChild(caps1);
+
+      const caps2 = td(7,'grey');
+      setHTML(caps2, escapeToHTML(grade.capsTopic) + '<br><b>' + escapeToHTML(grade.grade) + '</b> — ' + escapeToHTML(grade.timetable));
+      tr.appendChild(caps2);
+      tbl.appendChild(tr);
+
+      // Row 6 Introduction
+      tr = document.createElement('tr');
+      tr.appendChild(td(1,'left-label','Introduction'));
+      const intro1 = td(5); setHTML(intro1, escapeToHTML(week.lesson1.intro));
+      const intro2 = td(7); setHTML(intro2, escapeToHTML(week.lesson2.intro));
+      tr.appendChild(intro1);
+      tr.appendChild(intro2);
+      tbl.appendChild(tr);
+
+      // Row 7 Activities
+      tr = document.createElement('tr');
+      tr.appendChild(td(1,'left-label','Activities'));
+      const act1 = td(5); setHTML(act1, escapeToHTML(week.lesson1.activities));
+      const act2 = td(7); setHTML(act2, escapeToHTML(week.lesson2.activities));
+      tr.appendChild(act1);
+      tr.appendChild(act2);
+      tbl.appendChild(tr);
+
+      // Row 8 Check for understanding
+      tr = document.createElement('tr');
+      const chkLabel = td(1,'left-label','Check for\nunderstanding');
+      tr.appendChild(chkLabel);
+      const chk1 = td(5); setHTML(chk1, escapeToHTML(week.lesson1.check));
+      const chk2 = td(7); setHTML(chk2, escapeToHTML(week.lesson2.check));
+      tr.appendChild(chk1);
+      tr.appendChild(chk2);
+      tbl.appendChild(tr);
+
+      // Row 9 Integration
+      tr = document.createElement('tr');
+      const integLabel = td(2,'left-label','INTEGRATION');
+      tr.appendChild(integLabel);
+      const integ = td(12); setHTML(integ, escapeToHTML(week.integration));
+      tr.appendChild(integ);
+      tbl.appendChild(tr);
+
+      // Row 10 Resources
+      tr = document.createElement('tr');
+      const resLabel = td(2,'left-label','RESOURCES');
+      tr.appendChild(resLabel);
+      const res = td(12); setHTML(res, escapeToHTML(week.resources));
+      tr.appendChild(res);
+      tbl.appendChild(tr);
+
+      // Row 11 Homework
+      tr = document.createElement('tr');
+      const hwLabel = td(2,'left-label','HOMEWORK');
+      tr.appendChild(hwLabel);
+      const hw = td(12); setHTML(hw, escapeToHTML(week.homework));
+      tr.appendChild(hw);
+      tbl.appendChild(tr);
+
+      return tbl;
+    }
 
     function render(){
       const root = document.getElementById('doc');
       root.innerHTML = '';
 
-      PLAN.forEach(g => {
-        g.weeks.forEach(wk => {
+      for(const g of GRADES){
+        for(const week of g.weeks){
           const page = document.createElement('div');
-          page.className = 'page';
+          page.className = 'print-page';
           page.dataset.grade = g.grade;
-
-          const hw = typeof wk.homework === 'function' ? wk.homework() : (wk.homework || '');
-
-          page.innerHTML = `
-            <table class="plan">
-              <colgroup>
-                <col style="width:8%" />
-                <col style="width:10%" />
-                <col style="width:18%" />
-                <col style="width:18%" />
-                <col style="width:18%" />
-                <col style="width:18%" />
-                <col style="width:10%" />
-              </colgroup>
-              <tr>
-                <td colspan="3" class="top-left">INTERMEDIATE PHASE\nWEEKLY LESSON PLAN</td>
-                <td colspan="2" class="top-center">
-                  <div class="logo-wrap">
-                    <img class="logo" src="logo.png" alt="DISA Logo" onerror="this.style.display='none'" />
-                    <div class="school">DISA PRIMARY SCHOOL</div>
-                  </div>
-                </td>
-                <td colspan="2" class="top-right">SUBJECT:\n<span class="muted">${esc(SUBJECT_LABEL)}</span></td>
-              </tr>
-
-              <tr>
-                <td colspan="1" class="green">Term:</td>
-                <td colspan="2" class="green">Week:</td>
-                <td colspan="2" class="green">Date:</td>
-                <td colspan="1" class="green">Grade:</td>
-                <td colspan="1" class="green">Teacher:</td>
-              </tr>
-              <tr>
-                <td colspan="1">${esc(wk.term)}</td>
-                <td colspan="2">Week ${wk.week}</td>
-                <td colspan="2">${esc(wk.dates)}</td>
-                <td colspan="1">${esc(g.grade)}</td>
-                <td colspan="1">${esc(TEACHER_LABEL)}</td>
-              </tr>
-
-              <tr>
-                <td colspan="1"></td>
-                <td colspan="3" class="lesson-head">LESSON 1</td>
-                <td colspan="3" class="lesson-head">LESSON 2</td>
-              </tr>
-
-              <tr>
-                <td rowspan="4" class="side-vertical">TEACHING AND\nLEARNING\nACTIVITIES</td>
-                <td class="grey">CAPS Topic</td>
-                <td colspan="2">${esc(wk.lesson1.capsTopic)}</td>
-                <td colspan="3">${esc(wk.lesson2.capsTopic)}</td>
-              </tr>
-              <tr>
-                <td class="grey">Introduction</td>
-                <td colspan="2">${esc(wk.lesson1.introduction)}</td>
-                <td colspan="3">${esc(wk.lesson2.introduction)}</td>
-              </tr>
-              <tr>
-                <td class="grey">Activities</td>
-                <td colspan="2">${esc(wk.lesson1.activities)}</td>
-                <td colspan="3">${esc(wk.lesson2.activities)}</td>
-              </tr>
-              <tr>
-                <td class="grey">Check for understanding</td>
-                <td colspan="2">${esc(wk.lesson1.check)}</td>
-                <td colspan="3">${esc(wk.lesson2.check)}</td>
-              </tr>
-
-              <tr>
-                <td colspan="2" class="grey">INTEGRATION</td>
-                <td colspan="5">${esc(wk.integration)}</td>
-              </tr>
-              <tr>
-                <td colspan="2" class="grey">RESOURCES</td>
-                <td colspan="5">${esc(wk.resources)}</td>
-              </tr>
-              <tr>
-                <td colspan="2" class="grey">HOMEWORK</td>
-                <td colspan="5">${esc(hw)}</td>
-              </tr>
-            </table>
-          `;
-
+          page.appendChild(buildPlanTable(g, week));
           root.appendChild(page);
-        });
+        }
+      }
+
+      clearGradePrintFilter();
+      runTests();
+    }
+
+    // -------------------------
+    // PRINT HELPERS
+    // -------------------------
+
+    function safePrint(){
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => window.print());
       });
-
-      clearGradePrintFilter();
-    }
-
-    // =========================================================
-    // Print / PDF
-    // =========================================================
-    function downloadPDF(){
-      clearGradePrintFilter();
-      window.print();
-    }
-
-    function downloadPDFGrade(gradeName){
-      applyGradePrintFilter(gradeName);
-      window.print();
-      setTimeout(clearGradePrintFilter, 300);
     }
 
     function applyGradePrintFilter(gradeName){
       document.body.classList.add('print-grade-active');
-      document.querySelectorAll('.page').forEach(p => {
-        const match = (p.dataset.grade === gradeName);
-        p.classList.toggle('print-grade-show', match);
-      });
+      const pages = document.querySelectorAll('.print-page');
+      for(const p of pages){
+        if(p.dataset.grade === gradeName) p.classList.add('print-grade-show');
+        else p.classList.remove('print-grade-show');
+      }
     }
 
     function clearGradePrintFilter(){
       document.body.classList.remove('print-grade-active');
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('print-grade-show'));
+      const pages = document.querySelectorAll('.print-page');
+      for(const p of pages){ p.classList.remove('print-grade-show'); }
     }
 
-    // =========================================================
-    // XLSX export — EXACT template-like layout using ExcelJS
-    // Option A: workbook per grade; one sheet per week
-    // =========================================================
+    function printAll(){
+      clearGradePrintFilter();
+      safePrint();
+    }
 
-    async function fetchLogoBase64(){
-      // logo.png should be in the GitHub repo root (same folder as index.html)
-      // If missing, we export without the image.
+    function downloadPDFAll(){
+      clearGradePrintFilter();
+      safePrint();
+    }
+
+    function downloadPDFGrade(gradeName){
+      applyGradePrintFilter(gradeName);
+      safePrint();
+      setTimeout(clearGradePrintFilter, 400);
+    }
+
+    // -------------------------
+    // XLSX EXPORT (Option A): workbook per grade, sheet per week
+    // -------------------------
+
+    function getLogoExtension(){
+      const f = String(LOGO_FILE || '').toLowerCase().trim();
+      if(f.endsWith('.png')) return 'png';
+      if(f.endsWith('.jpg') || f.endsWith('.jpeg')) return 'jpeg';
+      return null; // DOCX not supported as image
+    }
+
+    async function fetchLogoArrayBuffer(){
+      const ext = getLogoExtension();
+      if(!ext) return null;
       try{
-        const res = await fetch('logo.png', { cache: 'no-store' });
+        const res = await fetch(LOGO_FILE, { cache: 'no-store' });
         if(!res.ok) return null;
-        const blob = await res.blob();
-        const arrayBuffer = await blob.arrayBuffer();
-        // Convert to base64
-        let binary = '';
-        const bytes = new Uint8Array(arrayBuffer);
-        for(let i=0;i<bytes.byteLength;i++) binary += String.fromCharCode(bytes[i]);
-        return btoa(binary);
+        return await res.arrayBuffer();
       }catch(e){
         return null;
       }
     }
 
     function setBorder(cell){
-      cell.border = {
-        top: {style:'thin'},
-        left:{style:'thin'},
-        bottom:{style:'thin'},
-        right:{style:'thin'}
-      };
+      cell.border = { top:{style:'medium'}, left:{style:'medium'}, bottom:{style:'medium'}, right:{style:'medium'} };
+    }
+    function fill(cell, argb){
+      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:argb} };
+    }
+    function font(cell, bold, size, argb){
+      cell.font = { name:'Arial', size:size, bold:!!bold, color:{argb:argb || 'FF000000'} };
+    }
+    function align(cell, h, v){
+      cell.alignment = { horizontal:h, vertical:v, wrapText:true };
     }
 
-    function fillGreen(cell){
-      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF93C47D'} };
-      cell.font = { bold:true, color:{argb:'FFFFFFFF'} };
-      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
+    function writeTemplate(ws){
+      const merges = [
+        'A1:D1','E1:J1','K1:N1',
+        'A2:B2','C2:D2','E2:J2','K2:L2','M2:N2',
+        'A3:B3','C3:D3','E3:N3',
+        'A4:B4','C4:G4','H4:N4',
+        'A5:A8',
+        'C5:G5','H5:N5',
+        'C6:G6','H6:N6',
+        'C7:G7','H7:N7',
+        'C8:G8','H8:N8',
+        'A9:B9','C9:N9',
+        'A10:B10','C10:G10','H10:N10',
+        'A11:B11','C11:N11'
+      ];
+      for(const m of merges){ ws.mergeCells(m); }
+
+      for(let r=1;r<=11;r++){
+        for(let c=1;c<=14;c++){
+          const cell = ws.getCell(r,c);
+          setBorder(cell);
+          font(cell,false,11);
+          align(cell,'left','top');
+        }
+      }
+
+      ws.getRow(1).height = 42;
+      ws.getRow(2).height = 20;
+      ws.getRow(3).height = 18;
+      ws.getRow(4).height = 18;
+      ws.getRow(5).height = 20;
+      ws.getRow(6).height = 45;
+      ws.getRow(7).height = 70;
+      ws.getRow(8).height = 45;
+      ws.getRow(9).height = 22;
+      ws.getRow(10).height = 22;
+      ws.getRow(11).height = 22;
+
+      for(let c=1;c<=14;c++){ ws.getColumn(c).width = 12; }
+
+      const nl = String.fromCharCode(10);
+
+      ws.getCell('A1').value = 'INTERMEDIATE PHASE' + nl + 'WEEKLY LESSON PLAN';
+      font(ws.getCell('A1'),true,12);
+      align(ws.getCell('A1'),'left','middle');
+
+      ws.getCell('E1').value = 'DISA PRIMARY SCHOOL';
+      font(ws.getCell('E1'),true,14);
+      align(ws.getCell('E1'),'center','middle');
+
+      ws.getCell('K1').value = 'SUBJECT:';
+      font(ws.getCell('K1'),true,12);
+      align(ws.getCell('K1'),'right','middle');
+
+      const greenCells = ['A2','C2','E2','K2','M2'];
+      for(const addr of greenCells){
+        const cell = ws.getCell(addr);
+        fill(cell,'FF93C47D');
+        font(cell,true,12,'FFFFFFFF');
+        align(cell,'center','middle');
+      }
+      ws.getCell('A2').value = 'Term:';
+      ws.getCell('C2').value = 'Week:';
+      ws.getCell('E2').value = 'Date:';
+      ws.getCell('K2').value = 'Grade:';
+      ws.getCell('M2').value = 'Teacher:';
+
+      ws.getCell('C4').value = 'LESSON 1';
+      ws.getCell('H4').value = 'LESSON 2';
+      for(const addr of ['C4','H4']){ font(ws.getCell(addr),true,12); align(ws.getCell(addr),'center','middle'); }
+
+      ws.getCell('A5').value = 'TEACHING AND' + nl + 'LEARNING' + nl + 'ACTIVITIES';
+      font(ws.getCell('A5'),true,11);
+      align(ws.getCell('A5'),'center','middle');
+
+      ws.getCell('B5').value = 'CAPS Topic';
+      ws.getCell('B6').value = 'Introduction';
+      ws.getCell('B7').value = 'Activities';
+      ws.getCell('B8').value = 'Check for' + nl + 'understanding';
+      for(const addr of ['B5','B6','B7','B8']){ font(ws.getCell(addr),true,11); align(ws.getCell(addr),'center','middle'); }
+
+      fill(ws.getCell('C5'),'FFE6E6E6');
+      fill(ws.getCell('H5'),'FFE6E6E6');
+
+      ws.getCell('A9').value  = 'INTEGRATION';
+      ws.getCell('A10').value = 'RESOURCES';
+      ws.getCell('A11').value = 'HOMEWORK';
+      for(const addr of ['A9','A10','A11']){ font(ws.getCell(addr),true,11); align(ws.getCell(addr),'center','middle'); }
     }
 
-    function fillGrey(cell){
-      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FFD9D9D9'} };
-      cell.font = { bold:true, color:{argb:'FF000000'} };
-      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
-    }
+    async function buildGradeWorkbook(gradeName){
+      if(!window.ExcelJS) throw new Error('ExcelJS not loaded');
 
-    function centerBold(cell, size=14){
-      cell.font = { bold:true, size };
-      cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
-    }
+      const grade = GRADES.find(g => g.grade === gradeName);
+      if(!grade) throw new Error('Unknown grade');
 
-    function leftBold(cell, size=14){
-      cell.font = { bold:true, size };
-      cell.alignment = { vertical:'top', horizontal:'left', wrapText:true };
+      const wb = new ExcelJS.Workbook();
+      wb.creator = TEACHER;
+
+      const logoBuf = await fetchLogoArrayBuffer();
+      let logoId = null;
+      const ext = getLogoExtension();
+      if(logoBuf && ext){
+        logoId = wb.addImage({ buffer: logoBuf, extension: ext });
+      }
+
+      for(const week of grade.weeks){
+        const ws = wb.addWorksheet('Week ' + week.w, {
+          pageSetup: { paperSize: 9, orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 1 }
+        });
+
+        writeTemplate(ws);
+
+        ws.getCell('K1').value = 'SUBJECT: ' + SUBJECT;
+
+        ws.getCell('A3').value = TERM_LABEL;
+        ws.getCell('C3').value = 'Week ' + week.w;
+        ws.getCell('E3').value = week.dates;
+        ws.getCell('K3').value = grade.grade;
+        ws.getCell('M3').value = TEACHER;
+
+        const nl = String.fromCharCode(10);
+        ws.getCell('C5').value = grade.capsTopic + nl + grade.grade + ' — ' + grade.timetable;
+        ws.getCell('H5').value = grade.capsTopic + nl + grade.grade + ' — ' + grade.timetable;
+
+        ws.getCell('C6').value = week.lesson1.intro;
+        ws.getCell('C7').value = week.lesson1.activities;
+        ws.getCell('C8').value = week.lesson1.check;
+
+        ws.getCell('H6').value = week.lesson2.intro;
+        ws.getCell('H7').value = week.lesson2.activities;
+        ws.getCell('H8').value = week.lesson2.check;
+
+        ws.getCell('C9').value = week.integration;
+        ws.getCell('C10').value = week.resources;
+        ws.getCell('C11').value = week.homework;
+
+        for(const addr of ['C5','H5','C6','C7','C8','H6','H7','H8','C9','C10','C11']){
+          align(ws.getCell(addr),'left','top');
+        }
+
+        if(logoId){
+          ws.addImage(logoId, { tl: { col: 6.2, row: 0.15 }, ext: { width: 120, height: 55 } });
+        }
+      }
+
+      return wb;
     }
 
     async function downloadXLSXGrade(gradeName){
-      if(typeof ExcelJS === 'undefined' || typeof saveAs === 'undefined'){
-        alert('Export libraries failed to load. Please refresh the page and try again.');
-        return;
+      try{
+        const wb = await buildGradeWorkbook(gradeName);
+        const buf = await wb.xlsx.writeBuffer();
+        const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'DISA_' + gradeName.split(' ').join('_') + '_Term1_Weekly_Lesson_Plans.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }catch(err){
+        console.error(err);
+        alert('XLSX download failed. Open the console for details.');
       }
-
-      const grade = PLAN.find(g => g.grade === gradeName);
-      if(!grade){
-        alert('Grade not found.');
-        return;
-      }
-
-      const wb = new ExcelJS.Workbook();
-      wb.creator = 'DISA Planning';
-
-      const logoB64 = await fetchLogoBase64();
-
-      for(const wk of grade.weeks){
-        const ws = wb.addWorksheet(`Week ${wk.week}`);
-
-        // Column widths approximated to match screenshot (A–N in template).
-        ws.columns = [
-          { width: 3 },  // A (margin)
-          { width: 18 }, // B
-          { width: 18 }, // C
-          { width: 18 }, // D
-          { width: 18 }, // E
-          { width: 18 }, // F
-          { width: 18 }, // G
-          { width: 18 }, // H
-          { width: 18 }, // I
-          { width: 18 }, // J
-          { width: 18 }, // K
-          { width: 18 }, // L
-          { width: 18 }, // M
-          { width: 3 },  // N (margin)
-        ];
-
-        // Row heights like template
-        ws.getRow(1).height = 40;
-        ws.getRow(2).height = 18;
-        ws.getRow(3).height = 22;
-        ws.getRow(4).height = 20;
-        ws.getRow(5).height = 22;
-        ws.getRow(6).height = 42;
-        ws.getRow(7).height = 70;
-        ws.getRow(8).height = 42;
-        ws.getRow(9).height = 24;
-        ws.getRow(10).height = 24;
-        ws.getRow(11).height = 24;
-
-        // ===== Top row (merged blocks) =====
-        // INTERMEDIATE PHASE WEEKLY LESSON PLAN (B1:E1)
-        ws.mergeCells('B1','E1');
-        ws.getCell('B1').value = 'INTERMEDIATE PHASE\nWEEKLY LESSON PLAN';
-        leftBold(ws.getCell('B1'), 14);
-
-        // Center logo + school (F1:K1)
-        ws.mergeCells('F1','K1');
-        ws.getCell('F1').value = 'DISA PRIMARY SCHOOL';
-        centerBold(ws.getCell('F1'), 16);
-
-        // Subject (L1:M1)
-        ws.mergeCells('L1','M1');
-        ws.getCell('L1').value = `SUBJECT:\n${SUBJECT_LABEL}`;
-        centerBold(ws.getCell('L1'), 14);
-
-        // Add logo image if available (positioned near top center)
-        if(logoB64){
-          const imageId = wb.addImage({ base64: logoB64, extension: 'png' });
-          ws.addImage(imageId, {
-            tl: { col: 6.8, row: 0.15 },
-            ext: { width: 70, height: 70 }
-          });
-        }
-
-        // Borders top row
-        for(const c of ['B','C','D','E','F','G','H','I','J','K','L','M']){
-          setBorder(ws.getCell(`${c}1`));
-        }
-
-        // ===== Green header row labels (Row 2) =====
-        // Term (B2:C2), Week (D2:E2), Date (F2:K2), Grade (L2), Teacher (M2)
-        ws.mergeCells('B2','C2'); ws.getCell('B2').value='Term:'; fillGreen(ws.getCell('B2'));
-        ws.mergeCells('D2','E2'); ws.getCell('D2').value='Week:'; fillGreen(ws.getCell('D2'));
-        ws.mergeCells('F2','K2'); ws.getCell('F2').value='Date:'; fillGreen(ws.getCell('F2'));
-        ws.getCell('L2').value='Grade:'; fillGreen(ws.getCell('L2'));
-        ws.getCell('M2').value='Teacher:'; fillGreen(ws.getCell('M2'));
-
-        // Borders row2
-        ['B2','C2','D2','E2','F2','G2','H2','I2','J2','K2','L2','M2'].forEach(a=>setBorder(ws.getCell(a)));
-
-        // ===== Row 3 values =====
-        ws.mergeCells('B3','C3'); ws.getCell('B3').value = wk.term;
-        ws.mergeCells('D3','E3'); ws.getCell('D3').value = `Week ${wk.week}`;
-        ws.mergeCells('F3','K3'); ws.getCell('F3').value = wk.dates;
-        ws.getCell('L3').value = gradeName;
-        ws.getCell('M3').value = TEACHER_LABEL;
-
-        ['B3','D3','F3','L3','M3'].forEach(addr=>{
-          const cell = ws.getCell(addr);
-          cell.alignment = { vertical:'middle', horizontal:'center', wrapText:true };
-          setBorder(cell);
-        });
-        // Also border the merged range cells
-        ['C3','E3','G3','H3','I3','J3','K3'].forEach(addr=>setBorder(ws.getCell(addr)));
-
-        // ===== Lesson headers row 4 =====
-        ws.mergeCells('C4','G4'); ws.getCell('C4').value = 'LESSON 1'; centerBold(ws.getCell('C4'), 14);
-        ws.mergeCells('H4','M4'); ws.getCell('H4').value = 'LESSON 2'; centerBold(ws.getCell('H4'), 14);
-        // Borders row4
-        for(const col of ['B','C','D','E','F','G','H','I','J','K','L','M']) setBorder(ws.getCell(`${col}4`));
-
-        // ===== Teaching & Learning Activities vertical label (B5:B8) =====
-        ws.mergeCells('B5','B8');
-        ws.getCell('B5').value = 'TEACHING AND\nLEARNING\nACTIVITIES';
-        ws.getCell('B5').alignment = { vertical:'middle', horizontal:'center', wrapText:true };
-        ws.getCell('B5').font = { bold:true };
-        setBorder(ws.getCell('B5'));
-        ['B6','B7','B8'].forEach(a=>setBorder(ws.getCell(a)));
-
-        // Row labels in C5:C8 (grey)
-        const labels = ['CAPS Topic','Introduction','Activities','Check for understanding'];
-        labels.forEach((lab, idx) => {
-          const r = 5 + idx;
-          ws.getCell(`C${r}`).value = lab;
-          fillGrey(ws.getCell(`C${r}`));
-          setBorder(ws.getCell(`C${r}`));
-        });
-
-        // Lesson 1 content D5:G8
-        const l1 = wk.lesson1;
-        ws.mergeCells('D5','G5'); ws.getCell('D5').value = l1.capsTopic;
-        ws.mergeCells('D6','G6'); ws.getCell('D6').value = l1.introduction;
-        ws.mergeCells('D7','G7'); ws.getCell('D7').value = l1.activities;
-        ws.mergeCells('D8','G8'); ws.getCell('D8').value = l1.check;
-
-        // Lesson 2 content H5:M8
-        const l2 = wk.lesson2;
-        ws.mergeCells('H5','M5'); ws.getCell('H5').value = l2.capsTopic;
-        ws.mergeCells('H6','M6'); ws.getCell('H6').value = l2.introduction;
-        ws.mergeCells('H7','M7'); ws.getCell('H7').value = l2.activities;
-        ws.mergeCells('H8','M8'); ws.getCell('H8').value = l2.check;
-
-        // Apply alignment + borders for content blocks
-        const contentCells = ['D5','D6','D7','D8','H5','H6','H7','H8'];
-        contentCells.forEach(addr => {
-          const cell = ws.getCell(addr);
-          cell.alignment = { vertical:'top', horizontal:'left', wrapText:true };
-          setBorder(cell);
-        });
-        // Border the merged spans (E/F/G and I/J/K/L/M)
-        for(const r of [5,6,7,8]){
-          ['E','F','G'].forEach(c=>setBorder(ws.getCell(`${c}${r}`)));
-          ['I','J','K','L','M'].forEach(c=>setBorder(ws.getCell(`${c}${r}`)));
-          setBorder(ws.getCell(`H${r}`));
-        }
-
-        // ===== Integration / Resources / Homework rows =====
-        // Labels in B9:C11 (grey) and content in D9:M11
-        const tail = [
-          { row:9, label:'INTEGRATION', value: wk.integration },
-          { row:10, label:'RESOURCES', value: wk.resources },
-          { row:11, label:'HOMEWORK', value: (typeof wk.homework === 'function' ? wk.homework() : (wk.homework || '')) }
-        ];
-
-        tail.forEach(t => {
-          ws.mergeCells(`B${t.row}`,`C${t.row}`);
-          ws.getCell(`B${t.row}`).value = t.label;
-          fillGrey(ws.getCell(`B${t.row}`));
-          setBorder(ws.getCell(`B${t.row}`));
-          setBorder(ws.getCell(`C${t.row}`));
-
-          ws.mergeCells(`D${t.row}`,`M${t.row}`);
-          ws.getCell(`D${t.row}`).value = t.value;
-          ws.getCell(`D${t.row}`).alignment = { vertical:'top', horizontal:'left', wrapText:true };
-          setBorder(ws.getCell(`D${t.row}`));
-          for(const c of ['E','F','G','H','I','J','K','L','M']) setBorder(ws.getCell(`${c}${t.row}`));
-        });
-
-        // Global borders on header row 1 cells
-        ['B1','F1','L1'].forEach(a=>setBorder(ws.getCell(a)));
-        // Make sure merged areas are bordered (best-effort)
-
-        // Page setup (print like a single page)
-        ws.pageSetup = {
-          orientation: 'portrait',
-          fitToPage: true,
-          fitToWidth: 1,
-          fitToHeight: 1,
-          margins: { left: 0.3, right: 0.3, top: 0.4, bottom: 0.4, header: 0, footer: 0 }
-        };
-      }
-
-      const buf = await wb.xlsx.writeBuffer();
-      saveAs(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `DISA_${gradeName.replace(' ','')}_Term1_WeeklyPlan.xlsx`);
     }
 
-    // =========================================================
-    // Self-tests (guard rails)
-    // =========================================================
-    (function tests(){
-      try{
-        console.assert(Array.isArray(PLAN) && PLAN.length === 3, 'Expected 3 grades in PLAN');
-        console.assert(PLAN.every(g => g.weeks.length === 13), 'Each grade should have 13 weeks');
-        console.assert(esc('a\nb') === 'a<br>b', 'esc should convert newlines');
-      }catch(e){
-        console.warn('Self-tests failed', e);
-      }
-    })();
+    // -------------------------
+    // TESTS (more coverage)
+    // -------------------------
 
+    function runTests(){
+      const t1 = escapeToHTML('a\nb');
+      console.assert(t1.indexOf('<br>') !== -1, 'escapeToHTML should convert newlines');
+
+      const t2 = escapeToHTML('quote " test');
+      console.assert(t2.indexOf('&quot;') !== -1, 'escapeToHTML should escape double quotes');
+
+      const t3 = escapeToHTML("x & y");
+      console.assert(t3.indexOf('&amp;') !== -1, 'escapeToHTML should escape ampersands');
+
+      const t4 = escapeToHTML("<tag>");
+      console.assert(t4.indexOf('&lt;tag&gt;') !== -1, 'escapeToHTML should escape angle brackets');
+
+      const t5 = escapeToHTML("O'Reilly");
+      console.assert(t5.indexOf('&#39;') !== -1, 'escapeToHTML should escape apostrophes');
+
+      console.assert(getLogoExtension() === 'png', 'PNG logo should be detected as png');
+    }
+
+    // Initial render
     render();
   </script>
 </body>
