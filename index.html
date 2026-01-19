@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DISA Primary — Term Planning Overview — Coding & Robotics (Term 1)</title>
+  <style>
+    :root{
+      --ink:#111;
+      --muted:#333;
+      --line:#1d1d1d;
+      --paper:#fff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      padding:24px;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+    }
+    .page{
+      max-width: 980px;
+      margin:0 auto;
+    }
+    .header{
+      text-align:left;
+      line-height:1.25;
+      margin-bottom:14px;
+    }
+    .header .school{font-weight:700; letter-spacing:.2px;}
+    .header .title{font-weight:700;}
+    .header .subject{font-weight:700;}
+    .header .teacher{font-weight:700;}
+    .header .grade{font-weight:700;}
+    .header .term{font-weight:700;}
+
+    .subhead{margin:10px 0 8px; font-weight:700;}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:fixed;
+      font-size:13px;
+    }
+    th, td{
+      border:1.6px solid var(--line);
+      vertical-align:top;
+      padding:8px;
+      word-wrap:break-word;
+      white-space:pre-wrap;
+    }
+    th{
+      text-align:left;
+      font-weight:700;
+    }
+
+    .col-week{width:16%}
+    .col-content{width:44%}
+    .col-pages{width:16%}
+    .col-ict{width:12%}
+    .col-res{width:12%}
+
+    .block{margin:18px 0 26px;}
+    .gradeband{margin:10px 0 8px; font-weight:700;}
+
+    .content-title{font-weight:700;}
+    .muted{color:var(--muted);}
+
+    /* Make it look like the Word template spacing */
+    .content p{margin:0 0 8px;}
+    .content .caps{font-weight:700;}
+    .content .label{font-weight:700;}
+
+    @media print{
+      body{padding:0}
+      .page{max-width:none; margin:0;}
+      .block{page-break-inside:avoid;}
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar" style="position:sticky;top:0;background:#fff;border-bottom:1px solid #ccc;padding:8px 12px;display:flex;gap:8px;z-index:10">
+    <button onclick="window.print()" style="padding:6px 10px;">Print</button>
+    <button onclick="downloadPDF()" style="padding:6px 10px;">Download PDF</button>
+  </div>
+  <div class="page">
+
+    <!-- ===== GRADE 5 ===== -->
+    <div class="header">
+      <div class="school">DISA PRIMARY SCHOOL</div>
+      <div class="title">Term Planning Overview</div>
+      <div class="subject">Coding & Robotics</div>
+      <div class="teacher">Mr Samuels</div>
+      <div class="grade">Grade 5</div>
+      <div class="muted"><b>Timetable:</b> 2 × 60-minute lessons per week</div>
+      <div class="term">Term 1, 2026</div>
+    </div>
+
+    <div class="subhead">Lesson planning:</div>
+
+    <div class="block">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-week">Week  and dates</th>
+            <th class="col-content">Content to be covered and subject integration</th>
+            <th class="col-pages">Textbook pages or Worksheets</th>
+            <th class="col-ict">ICT and links</th>
+            <th class="col-res">Resources used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Week 1:
+14 - 16 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Digital Foundations (Windows login + typing) + Internet & E-communications</div>
+              <p><span class="label">Lesson:</span> Orientation + Digital Citizenship basics</p>
+              <p><span class="label">Lesson 1:</span> Windows OS login routine (username, password rules) + classroom device care.</p>
+              <p><span class="label">Lesson 2:</span> Typing posture + home-row (accuracy over speed).</p>
+              
+              <p class="muted"><span class="label">Skills:</span> Login, basic file naming, typing accuracy, safe online behaviour.</p>
+            </td>
+            <td>
+Typing warm-up sheet (home row)
+Password rules mini-worksheet</td>
+            <td>
+TypingClub / NitroType (offline alternative)
+School LMS / shared drive</td>
+            <td>
+Laptops/PC lab
+Whiteboard
+Workbooks</td>
+          </tr>
+
+          <tr>
+            <td>Week 2:
+19 - 23 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Application Skills — Presentations</div>
+              <p><span class="label">Lesson 1:</span> Presentation UI (slides, layouts). Create a 2-slide presentation.</p>
+              <p><span class="label">Lesson 2:</span> Formatting text (font, size, colour, alignment) + inserting simple shapes.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Introduce presentations + user interface + layout of slides. </p>
+            </td>
+            <td>
+Slides checklist (2 slides)
+Formatting practice sheet</td>
+            <td>
+PowerPoint / Google Slides
+Projector / Smartboard</td>
+            <td>
+Computers
+Smartboard
+Workbooks</td>
+          </tr>
+
+          <tr>
+            <td>Week 3:
+26 - 30 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics Skills (CAD) — Basic 2D drawing tools</div>
+              <p><span class="label">Lesson 1:</span> CAD interface + creating/saving drawings.</p>
+              <p><span class="label">Lesson 2:</span> Draw using Line / Circle / Rectangle tools.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Use Line, Circle, Rectangle tools; create and save drawings.</p>
+            </td>
+            <td>
+2D drawing worksheet pack
+CAD tool icons sheet</td>
+            <td>
+Tinkercad / FreeCAD (school choice)
+Offline screenshots</td>
+            <td>
+Computers
+Mouse
+Smartboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 4:
+2 - 6 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Algorithms & Coding — Operators + If/Then</div>
+              <p><span class="label">Lesson 1:</span> Block coding refresh (variables + inputs).</p>
+              <p><span class="label">Lesson 2:</span> Introduce operators (greater than / less than) and IF THEN control.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Introduce operators (greater/less) + IF THEN. </p>
+            </td>
+            <td>
+Scratch task sheet: Compare numbers
+Mini-rubric</td>
+            <td>
+Scratch (offline editor if needed)</td>
+            <td>
+Computers
+Whiteboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 5:
+9 - 13 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics Skills — Microcontroller foundations</div>
+              <p><span class="label">Lesson 1:</span> Input–Process–Output + identify devices.</p>
+              <p><span class="label">Lesson 2:</span> Introduce microcontroller layout + connecting components conceptually.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Introduce microcontroller, IPO, block-based programming, LED/buzzer outputs.</p>
+            </td>
+            <td>
+IPO worksheet
+Microcontroller diagram sheet</td>
+            <td>
+MakeCode / Tinkercad Circuits</td>
+            <td>
+Micro:bit/Arduino kits
+Breadboards
+LEDs/Buzzers</td>
+          </tr>
+
+          <tr>
+            <td>Week 6:
+16 - 20 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics Skills — Build + test outputs</div>
+              <p><span class="label">Lesson 1:</span> Program LED blink patterns (sequence + timing).</p>
+              <p><span class="label">Lesson 2:</span> Program buzzer pattern (alarm / melody basics).</p>
+              
+            </td>
+            <td>
+Coding & Circuit worksheet</td>
+            <td>
+MakeCode projects (saved links)
+Class shared folder</td>
+            <td>
+Kits
+Computers
+Smartboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 7:
+23 - 27 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Practical Assessment Task (PAT) — Investigation + Problem statement</div>
+              <p><span class="label">Lesson 1:</span> PAT brief + choose a simple problem to solve (school/community).</p>
+              <p><span class="label">Lesson 2:</span> Investigation: gather ideas, sketch, list resources.</p>
+              
+            </td>
+            <td>
+PAT brief + investigation template</td>
+            <td>
+Google Docs / Word
+Image search (safe mode)</td>
+            <td>
+Workbooks
+Devices
+Printed rubrics</td>
+          </tr>
+
+          <tr>
+            <td>Week 8:
+2 - 6 March</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Design & Make (Build)</div>
+              <p><span class="label">Lesson 1:</span> Build the solution (Scratch OR microcontroller project).</p>
+              <p><span class="label">Lesson 2:</span> Continue build + test checklist.</p>
+              
+            </td>
+            <td>
+PAT build checklist</td>
+            <td>
+Scratch / MakeCode</td>
+            <td>
+Computers
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 9:
+9 - 13 March</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Evaluation</div>
+              <p><span class="label">Lesson 1:</span> Peer testing + feedback form.</p>
+              <p><span class="label">Lesson 2:</span> Improvements based on feedback.</p>
+              
+            </td>
+            <td>
+Peer feedback form
+Evaluation sheet</td>
+            <td>
+Slides / Posters</td>
+            <td>
+Smartboard
+Workbooks</td>
+          </tr>
+
+          <tr>
+            <td>Week 10:
+16 - 20 March</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Present + Reflect</div>
+              <p><span class="label">Lesson 1:</span> Present to class (demo + explain choices).</p>
+              <p><span class="label">Lesson 2:</span> Reflection writing: what I learned + what I’d change.</p>
+              
+            </td>
+            <td>
+Presentation rubric
+Reflection paragraph prompt</td>
+            <td>
+Projector
+Class drive</td>
+            <td>
+Computers
+Smartboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 11:
+23 - 27 March</td>
+            <td class="content">
+              <div class="caps">Consolidation & Support</div>
+              <p><span class="label">Lesson 1:</span> Catch-up for unfinished PATs.</p>
+              <p><span class="label">Lesson 2:</span> Extension challenge (add a feature).</p>
+              
+            </td>
+            <td>
+Catch-up checklist
+Quiz</td>
+            <td>
+Scratch/MakeCode</td>
+            <td>
+Devices
+Rubrics</td>
+          </tr>
+
+          <tr>
+            <td>Week 12:
+30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
+            <td class="content">
+              <div class="caps">Revision & Skills reinforcement</div>
+              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Typing improvement session (accuracy target).</p>
+              <p><span class="label">Lesson 2:</span> Coding drills (IF THEN + variables).</p>
+              
+            </td>
+            <td>
+Revision pack</td>
+            <td>
+Typing tool + Scratch</td>
+            <td>
+Computers
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 13:
+6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
+            <td class="content">
+              <div class="caps">End-of-term wrap-up</div>
+              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Showcase gallery walk (best work display).</p>
+              <p><span class="label">Lesson 2:</span> Final reflection + goal setting for Term 2.</p>
+              
+            </td>
+            <td>
+Portfolio checklist</td>
+            <td>
+Class drive / folder structure</td>
+            <td>
+Computers
+Workbooks</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- ===== GRADE 6 ===== -->
+    <div class="header">
+      <div class="school">DISA PRIMARY SCHOOL</div>
+      <div class="title">Term Planning Overview</div>
+      <div class="subject">Coding & Robotics</div>
+      <div class="teacher">Mr Samuels</div>
+      <div class="grade">Grade 6</div>
+      <div class="muted"><b>Timetable:</b> 2 × 60-minute lessons per week</div>
+      <div class="term">Term 1, 2026</div>
+    </div>
+
+    <div class="subhead">Lesson planning:</div>
+
+    <div class="block">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-week">Week  and dates</th>
+            <th class="col-content">Content to be covered and subject integration</th>
+            <th class="col-pages">Textbook pages or Worksheets</th>
+            <th class="col-ict">ICT and links</th>
+            <th class="col-res">Resources used</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>Week 1:
+14 - 16 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Internet & E-communications + Digital Foundations</div>
+              <p><span class="label">Lesson:</span> Orientation + responsible use</p>
+              <p><span class="label">Lesson 1:</span> Windows login mastery + safe password habits.</p>
+              <p><span class="label">Lesson 2:</span> Internet use rules + appropriate use + email basics.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Rules of using the internet; appropriate use; email; passwords. </p>
+            </td>
+            <td>
+Internet rules worksheet
+Typing baseline sheet</td>
+            <td>
+TypingClub/NitroType
+School email (if available)</td>
+            <td>
+PC lab
+Whiteboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 2:
+19 - 23 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Application Skills — Spreadsheet basics</div>
+              <p><span class="label">Lesson 1:</span> Spreadsheet UI (rows/columns/cells) + data entry.</p>
+              <p><span class="label">Lesson 2:</span> Cell formatting + alignment + borders.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Spreadsheet UI, bar charts, formatting.</p>
+            </td>
+            <td>
+Spreadsheet worksheet
+Bar chart checklist</td>
+            <td>
+Excel / Google Sheets</td>
+            <td>
+Computers
+Smartboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 3:
+26 - 30 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Application Skills — CAD (2D tools continued)</div>
+              <p><span class="label">Lesson 1:</span> Copy a provided 2D drawing with accuracy.</p>
+              <p><span class="label">Lesson 2:</span> Save versions + annotate dimensions (where tool allows).</p>
+              
+            </td>
+            <td>
+CAD practice pack</td>
+            <td>
+Tinkercad / FreeCAD</td>
+            <td>
+Computers
+Mouse</td>
+          </tr>
+
+          <tr>
+            <td>Week 4:
+2 - 6 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Algorithms & Coding — Conditions + collision logic</div>
+              <p><span class="label">Lesson 1:</span> Build a simple animation with events and variables.</p>
+              <p><span class="label">Lesson 2:</span> Introduce “touching” / collision + IF THEN control.</p>
+              
+            </td>
+            <td>
+Scratch game sheet
+Mini-rubric</td>
+            <td>
+Scratch</td>
+            <td>
+Computers</td>
+          </tr>
+
+          <tr>
+            <td>Week 5:
+9 - 13 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics — Microcontroller outputs (sequence)</div>
+              <p><span class="label">Lesson 1:</span> Outputs to multiple LEDs (sequence).</p>
+              <p><span class="label">Lesson 2:</span> Introduce digital input device (button or keypad).</p>
+              
+            </td>
+            <td>
+Circuit worksheet
+Sequence challenge sheet</td>
+            <td>
+MakeCode / Tinkercad Circuits</td>
+            <td>
+Kits
+Breadboards</td>
+          </tr>
+
+          <tr>
+            <td>Week 6:
+16 - 20 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics — Introduce DC motor</div>
+              <p><span class="label">Lesson 1:</span> Connect and control a DC motor (speed concept).</p>
+              <p><span class="label">Lesson 2:</span> Use variables to control motor speed (simple numeric variable).</p>
+              
+            </td>
+            <td>
+Motor safety sheet
+Coding & Circuit worksheet</td>
+            <td>
+MakeCode / Arduino IDE (teacher-led)</td>
+            <td>
+DC motors
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 7:
+23 - 27 February</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Investigation + Design</div>
+              <p><span class="label">Lesson 1:</span> PAT brief + pick one of 2–3 project options.</p>
+              <p><span class="label">Lesson 2:</span> Investigation (possible solutions, sketches, materials).</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> PAT includes Investigation + Design. </p>
+            </td>
+            <td>
+PAT templates</td>
+            <td>
+Docs / Slides</td>
+            <td>
+Rubrics
+Workbooks</td>
+          </tr>
+
+          <tr>
+            <td>Week 8:
+2 - 6 March</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Design & Make (Build)</div>
+              <p><span class="label">Lesson 1:</span> Build prototype + basic code.</p>
+              <p><span class="label">Lesson 2:</span> Continue build + testing checkpoints.</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> PAT includes Design and Make. </p>
+            </td>
+            <td>
+Build checklist</td>
+            <td>
+MakeCode / Arduino</td>
+            <td>
+Kits
+Tools</td>
+          </tr>
+
+          <tr>
+            <td>Week 9:
+9 - 13 March</td>
+            <td class="content">
+              <div class="caps">CAPS: PAT — Evaluation</div>
+              <p><span class="label">Lesson 1:</span> Evaluate against requirements + peer testing.</p>
+              <p><span class="label">Lesson 2:</span> Improve based on testing evidence.</p>
+              
+            </td>
+            <td>
+Evaluation sheet
+Peer test form</td>
+            <td>
+Camera/Tablet
+Slides</td>
+            <td>
+Smartboard
+Devices</td>
+          </tr>
+
+          <tr>
+            <td>Week 10:
+16 - 20 March</td>
+            <td class="content">
+              <div class="caps">CAPS: Formal Assessment</div>
+              <p><span class="label">Lesson 1:</span> Final PAT submissions.</p>
+              <p><span class="label">Lesson 2:</span> Test (internet safety + app skills + coding concepts).</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Formal assessment: Test. </p>
+            </td>
+            <td>
+Test paper
+Memo</td>
+            <td>
+School LMS</td>
+            <td>
+Printed papers</td>
+          </tr>
+
+          <tr>
+            <td>Week 11:
+23 - 27 March</td>
+            <td class="content">
+              <div class="caps">Consolidation & Extension</div>
+              <p><span class="label">Lesson 1:</span> Catch-up + remedial support.</p>
+              <p><span class="label">Lesson 2:</span> Extension: add feature to PAT (sensor, second output, timer).</p>
+              
+            </td>
+            <td>
+Extension checklist</td>
+            <td>
+MakeCode</td>
+            <td>
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 12:
+30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
+            <td class="content">
+              <div class="caps">Revision</div>
+              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Spreadsheet recap + chart quick task.</p>
+              <p><span class="label">Lesson 2:</span> Coding recap (conditions + variables).</p>
+              
+            </td>
+            <td>
+Revision pack</td>
+            <td>
+Excel/Sheets + MakeCode</td>
+            <td>
+Computers
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 13:
+6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
+            <td class="content">
+              <div class="caps">End-of-term wrap-up</div>
+              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Showcase + peer awards.</p>
+              <p><span class="label">Lesson 2:</span> Final reflection + Term 2 preview.</p>
+              
+            </td>
+            <td>
+Portfolio checklist</td>
+            <td>
+Class drive</td>
+            <td>
+Computers</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- ===== GRADE 7 ===== -->
+    <div class="header">
+      <div class="school">DISA PRIMARY SCHOOL</div>
+      <div class="title">Term Planning Overview</div>
+      <div class="subject">Coding & Robotics</div>
+      <div class="teacher">Mr Samuels</div>
+      <div class="grade">Grade 7</div>
+      <div class="muted"><b>Timetable:</b> 2 × 30-minute lessons per week</div>
+      <div class="term">Term 1, 2026</div>
+    </div>
+
+    <div class="subhead">Lesson planning:</div>
+
+    <div class="block">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-week">Week  and dates</th>
+            <th class="col-content">Content to be covered and subject integration</th>
+            <th class="col-pages">Textbook pages or Worksheets</th>
+            <th class="col-ict">ICT and links</th>
+            <th class="col-res">Resources used</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>Week 1:
+14 - 16 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Digital Foundations + Internet & E-communications</div>
+              <p><span class="label">Lesson:</span> Orientation + lab rules</p>
+              <p><span class="label">Lesson 1:</span> Windows login + file/folder structure (portfolio folder per learner).</p>
+              <p><span class="label">Lesson 2:</span> Typing baseline + targets (WPM + accuracy).</p>
+              
+            </td>
+            <td>
+Typing baseline
+Lab rules sheet</td>
+            <td>
+Typing tool
+School portal</td>
+            <td>
+Computers
+Smartboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 2:
+19 - 23 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Application Skills — Web basics (HTML/CSS refresh)</div>
+              <p><span class="label">Lesson 1:</span> HTML structure recap (tags, formatting, lists, images, links).</p>
+              <p><span class="label">Lesson 2:</span> CSS basics (classes/IDs, style sheets, text formatting).</p>
+              
+            </td>
+            <td>
+HTML/CSS worksheet</td>
+            <td>
+VS Code / Notepad++
+Browser preview</td>
+            <td>
+Computers</td>
+          </tr>
+
+          <tr>
+            <td>Week 3:
+26 - 30 January</td>
+            <td class="content">
+              <div class="caps">CAPS: Algorithms & Coding — Logic + truth tables (intro)</div>
+              <p><span class="label">Lesson 1:</span> Flow diagrams + data types recap.</p>
+              <p><span class="label">Lesson 2:</span> Logic gates + truth tables (combine two gates).</p>
+              
+            </td>
+            <td>
+Logic gates worksheet
+Truth table practice</td>
+            <td>
+Interactive logic simulator (optional)</td>
+            <td>
+Workbooks
+Whiteboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 4:
+2 - 6 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Algorithms & Coding — Relational operators + IF / ELIF</div>
+              <p><span class="label">Lesson 1:</span> Relational operators (>, <, ==, !=, >=, <=).</p>
+              <p><span class="label">Lesson 2:</span> IF statements (indentation, one or multiple commands).</p>
+              
+              <p class="muted"><span class="label">CAPS note:</span> Introduce relational operators + basic IF + ELIF. </p>
+            </td>
+            <td>
+Python worksheet: comparisons
+Mini-rubric</td>
+            <td>
+Python (Thonny)
+Offline runner</td>
+            <td>
+Computers
+Whiteboard</td>
+          </tr>
+
+          <tr>
+            <td>Week 5:
+9 - 13 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Algorithms & Coding — Boolean operators + IF/ELSE</div>
+              <p><span class="label">Lesson 1:</span> AND / OR / NOT with conditions.</p>
+              <p><span class="label">Lesson 2:</span> IF/ELSE + multi-ELIF decision structures.</p>
+              
+            </td>
+            <td>
+Python mini-project brief</td>
+            <td>
+Python (Thonny)</td>
+            <td>
+Computers</td>
+          </tr>
+
+          <tr>
+            <td>Week 6:
+16 - 20 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics Skills — CAD mechanical components</div>
+              <p><span class="label">Lesson 1:</span> CAD tools recap (2D/3D extrusion/dimensions).</p>
+              <p><span class="label">Lesson 2:</span> Mechanical components focus (linkages/gears or pulleys).</p>
+              
+            </td>
+            <td>
+Mechanical drawing worksheet</td>
+            <td>
+CAD tool
+Screenshots evidence</td>
+            <td>
+Computers
+Mouse</td>
+          </tr>
+
+          <tr>
+            <td>Week 7:
+23 - 27 February</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics — Sensors + outputs</div>
+              <p><span class="label">Lesson 1:</span> Breadboards + microcontroller recap (IPO).</p>
+              <p><span class="label">Lesson 2:</span> Ultrasonic sensor + buzzer OR LED response.</p>
+              
+            </td>
+            <td>
+Coding & Circuit worksheet</td>
+            <td>
+MakeCode / Arduino
+Simulators (optional)</td>
+            <td>
+Sensors
+Breadboards</td>
+          </tr>
+
+          <tr>
+            <td>Week 8:
+2 - 6 March</td>
+            <td class="content">
+              <div class="caps">CAPS: Robotics — Extend sensor project</div>
+              <p><span class="label">Lesson 1:</span> Continue ultrasonic sensor project + improve threshold logic.</p>
+              <p><span class="label">Lesson 2:</span> Add second output (LED + buzzer) or variable brightness.</p>
+              
+            </td>
+            <td>
+Project log sheet</td>
+            <td>
+MakeCode / Arduino</td>
+            <td>
+Kits
+Devices</td>
+          </tr>
+
+          <tr>
+            <td>Week 9:
+9 - 13 March</td>
+            <td class="content">
+              <div class="caps">CAPS: Mini PAT (Term 1) — Consolidation + assessment evidence</div>
+              <p><span class="label">Lesson 1:</span> Mini PAT brief (choose: coding mini-game OR sensor alarm).</p>
+              <p><span class="label">Lesson 2:</span> Build + test + gather evidence.</p>
+              
+            </td>
+            <td>
+Mini PAT brief
+Rubric</td>
+            <td>
+Python/MakeCode</td>
+            <td>
+Computers
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 10:
+16 - 20 March</td>
+            <td class="content">
+              <div class="caps">CAPS: Consolidation + Formal task</div>
+              <p><span class="label">Lesson 1:</span> Final Mini PAT submissions.</p>
+              <p><span class="label">Lesson 2:</span> Short test/quiz (operators, IF/ELIF, safety).</p>
+              
+            </td>
+            <td>
+Test paper
+Memo</td>
+            <td>
+School LMS</td>
+            <td>
+Printed papers</td>
+          </tr>
+
+          <tr>
+            <td>Week 11:
+23 - 27 March</td>
+            <td class="content">
+              <div class="caps">Catch-up + Extension</div>
+              <p><span class="label">Lesson 1:</span> Catch-up for Mini PAT improvements.</p>
+              <p><span class="label">Lesson 2:</span> Extension: add feature (score, level, or second sensor output).</p>
+              
+            </td>
+            <td>
+Catch-up checklist</td>
+            <td>
+Python/MakeCode</td>
+            <td>
+Devices</td>
+          </tr>
+
+          <tr>
+            <td>Week 12:
+30 March - 3 April (Fri 3 Apr – Good Friday: no school)</td>
+            <td class="content">
+              <div class="caps">Revision</div>
+              <p><span class="label">Public Holiday:</span> Good Friday (Fri 3 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Typing improvement + file management.</p>
+              <p><span class="label">Lesson 2:</span> Coding drills (conditions, boolean logic).</p>
+              
+            </td>
+            <td>
+Revision pack</td>
+            <td>
+Typing + Python/MakeCode</td>
+            <td>
+Computers
+Kits</td>
+          </tr>
+
+          <tr>
+            <td>Week 13:
+6 - 10 April (Mon 6 Apr – Family Day: no school)</td>
+            <td class="content">
+              <div class="caps">End-of-term wrap-up</div>
+              <p><span class="label">Public Holiday:</span> Family Day (Mon 6 April) – no school.</p>
+              <p><span class="label">Lesson 1:</span> Showcase + peer review.</p>
+              <p><span class="label">Lesson 2:</span> Final reflection + Term 2 preview.</p>
+              
+            </td>
+            <td>
+Portfolio checklist</td>
+            <td>
+Class drive</td>
+            <td>
+Computers</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <script>
+    function downloadPDF(){
+      // Most browsers support "Save as PDF" from the print dialog
+      // This opens the print dialog so you can choose "Save as PDF"
+      window.print();
+    }
+  </script>
+</body>
+</html>
