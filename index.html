@@ -687,6 +687,7 @@
     }
 
     // -------------------------
+    // -------------------------
     // XLSX EXPORT
     // workbook per grade, sheet per week
     // -------------------------
@@ -793,7 +794,17 @@
       for(const addr of ['A9','A10','A11']){ font(ws.getCell(addr),true,11); align(ws.getCell(addr),'center','middle'); }
     }
 
-    
+    async function buildGradeWorkbook(gradeName){
+      const grade = GRADES.find(g => g.grade === gradeName);
+      if(!grade) throw new Error('Unknown grade: ' + gradeName);
+
+      const wb = new ExcelJS.Workbook();
+      wb.creator = TEACHER;
+
+      // Use base64 image for best browser reliability
+      const ext = getLogoExtension();
+      const logoB64 = ext ? await fetchLogoBase64() : null;
+      const logoId = (logoB64 && ext) ? wb.addImage({ base64: logoB64, extension: ext }) : null;
 
       for(const week of grade.weeks){
         const ws = wb.addWorksheet('Week ' + week.w, {
@@ -831,8 +842,8 @@
         }
 
         if(logoId){
-          // Place logo roughly centered in header block
-          ws.addImage(logoId, { tl: { col: 6.2, row: 0.15 }, ext: { width: 120, height: 55 } });
+          // Place logo inside the center header block (E1:J1)
+          ws.addImage(logoId, { tl: { col: 6.0, row: 0.05 }, ext: { width: 140, height: 60 } });
         }
       }
 
@@ -841,17 +852,6 @@
 
     async function downloadXLSXGrade(gradeName){
       try{
-        const ext = getLogoExtension();
-        if(!ext){
-          console.warn('Logo skipped (XLSX): unsupported logo file type:', LOGO_FILE);
-        } else {
-          const urls = logoCandidates().map(addCacheBust);
-          const hit = await fetchFirstOK(urls);
-          if(!hit){
-            console.warn('Logo fetch failed (XLSX). Check file path/case and repo location. Tried:', urls);
-          }
-        }
-
         const wb = await buildGradeWorkbook(gradeName);
         const buf = await wb.xlsx.writeBuffer();
         const blob = new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
