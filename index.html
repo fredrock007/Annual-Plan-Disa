@@ -162,12 +162,36 @@
     }
 
     async function fetchLogoArrayBuffer(){
+      // Returns Uint8Array (more reliable with ExcelJS in browsers)
       const ext = getLogoExtension();
       if(!ext) return null;
       const urls = logoCandidates().map(addCacheBust);
       const hit = await fetchFirstOK(urls);
       if(!hit) return null;
-      return await hit.res.arrayBuffer();
+      const buf = await hit.res.arrayBuffer();
+      return new Uint8Array(buf);
+    }
+
+    async function fetchLogoBase64(){
+      // ExcelJS image support is most reliable in the browser using base64.
+      const ext = getLogoExtension();
+      if(!ext) return null;
+      const urls = logoCandidates().map(addCacheBust);
+      const hit = await fetchFirstOK(urls);
+      if(!hit) return null;
+
+      const blob = await hit.res.blob();
+      return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = String(reader.result || '');
+          const comma = dataUrl.indexOf(',');
+          if(comma === -1) return resolve(null);
+          resolve(dataUrl.slice(comma + 1)); // base64 only
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(blob);
+      });
     }
 
     async function waitForImagesLoaded(timeoutMs){
@@ -769,19 +793,7 @@
       for(const addr of ['A9','A10','A11']){ font(ws.getCell(addr),true,11); align(ws.getCell(addr),'center','middle'); }
     }
 
-    async function buildGradeWorkbook(gradeName){
-      if(!window.ExcelJS) throw new Error('ExcelJS not loaded');
-
-      const grade = GRADES.find(g => g.grade === gradeName);
-      if(!grade) throw new Error('Unknown grade');
-
-      const wb = new ExcelJS.Workbook();
-      wb.creator = TEACHER;
-
-      // Fetch logo once per workbook (optional)
-      const logoBuf = await fetchLogoArrayBuffer();
-      const ext = getLogoExtension();
-      const logoId = (logoBuf && ext) ? wb.addImage({ buffer: logoBuf, extension: ext }) : null;
+    
 
       for(const week of grade.weeks){
         const ws = wb.addWorksheet('Week ' + week.w, {
