@@ -68,6 +68,7 @@
   </div>
 
   <div class="doc" id="doc"></div>
+  <div class="doc" id="errorBox" style="display:none;color:#b00020;font-weight:700"></div>
 
   <script>
     // NOTE (Fred): Some previously uploaded files in this chat may expire over time.
@@ -900,8 +901,37 @@
       console.assert(typeof setBorder === 'function', 'setBorder should exist');
     }
 
-    // Initial render
-    render();
+    function showFatal(msg){
+      const box = document.getElementById('errorBox');
+      if(!box) return;
+      box.style.display = 'block';
+      box.textContent = '⚠️ Page error: ' + msg + ' (Open DevTools → Console for details)';
+    }
+
+    // Global error handler so we never get a blank page without feedback
+    window.addEventListener('error', (e) => {
+      try{ showFatal(e && e.message ? e.message : 'Unknown error'); }catch(_){}
+    });
+
+    window.addEventListener('unhandledrejection', (e) => {
+      try{ showFatal((e && e.reason && e.reason.message) ? e.reason.message : 'Unhandled promise rejection'); }catch(_){}
+    });
+
+    // Initial render (after DOM is ready)
+    function boot(){
+      try{
+        render();
+      }catch(err){
+        console.error(err);
+        showFatal(err && err.message ? err.message : String(err));
+      }
+    }
+
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', boot);
+    }else{
+      boot();
+    }
   </script>
 </body>
 </html>
