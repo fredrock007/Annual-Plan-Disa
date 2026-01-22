@@ -823,9 +823,17 @@
       // Use base64 DATA-URL image for best browser reliability
       const ext = getLogoExtension();
       const logoDataUrl = ext ? await fetchLogoBase64() : null;
-      const logoId = (logoDataUrl && ext)
-        ? wb.addImage({ base64: logoDataUrl, extension: ext })
-        : null;
+      let logoId = null;
+      if(logoDataUrl && ext){
+        try{
+          // ExcelJS in browsers is most reliable when given PURE base64 (no data: prefix)
+          const pure = String(logoDataUrl).split(',')[1] || '';
+          logoId = wb.addImage({ base64: pure, extension: ext });
+        }catch(e){
+          console.warn('XLSX: failed to add logo image', e);
+          logoId = null;
+        }
+      }
 
       if(!logoId){
         console.warn('XLSX: logo not embedded (logoId null). Check that "' + LOGO_FILE + '" is reachable on GitHub Pages. Tried:', logoCandidates());
