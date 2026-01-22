@@ -174,7 +174,7 @@
     }
 
     async function fetchLogoBase64(){
-      // ExcelJS image support is most reliable in the browser using base64.
+      // Return a FULL data URL ("data:image/png;base64,...") because ExcelJS is most reliable with that.
       const ext = getLogoExtension();
       if(!ext) return null;
       const urls = logoCandidates().map(addCacheBust);
@@ -184,15 +184,33 @@
       const blob = await hit.res.blob();
       return await new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = () => {
-          const dataUrl = String(reader.result || '');
-          const comma = dataUrl.indexOf(',');
-          if(comma === -1) return resolve(null);
-          resolve(dataUrl.slice(comma + 1)); // base64 only
-        };
+        reader.onload = () => resolve(String(reader.result || '')); // full data URL
         reader.onerror = () => resolve(null);
         reader.readAsDataURL(blob);
       });
+    }
+
+    async function waitForImagesLoaded(timeoutMs){
+      const imgs = Array.from(document.images || []);
+      if(imgs.length === 0) return true;
+      const timeout = typeof timeoutMs === 'number' ? timeoutMs : 6000;
+
+      function one(img){
+        return new Promise(resolve => {
+          if(img.complete && img.naturalWidth > 0) return resolve(true);
+          const done = () => resolve(img.naturalWidth > 0);
+          img.addEventListener('load', done, { once:true });
+          img.addEventListener('error', () => resolve(false), { once:true });
+        });
+      }
+
+      const results = await Promise.race([
+        Promise.all(imgs.map(one)),
+        new Promise(resolve => setTimeout(() => resolve(null), timeout))
+      ]);
+
+      if(results === null) return false;
+      return results.every(Boolean);
     }
 
     async function waitForImagesLoaded(timeoutMs){
@@ -802,10 +820,16 @@
       const wb = new ExcelJS.Workbook();
       wb.creator = TEACHER;
 
-      // Use base64 image for best browser reliability
+      // Use base64 DATA-URL image for best browser reliability
       const ext = getLogoExtension();
-      const logoB64 = ext ? await fetchLogoBase64() : null;
-      const logoId = (logoB64 && ext) ? wb.addImage({ base64: logoB64, extension: ext }) : null;
+      const logoDataUrl = ext ? await fetchLogoBase64() : null;
+      const logoId = (logoDataUrl && ext)
+        ? wb.addImage({ base64: logoDataUrl, extension: ext })
+        : null;
+
+      if(!logoId){
+        console.warn('XLSX: logo not embedded (logoId null). Check that "' + LOGO_FILE + '" is reachable on GitHub Pages. Tried:', logoCandidates());
+      }
 
       for(const week of grade.weeks){
         const ws = wb.addWorksheet('Week ' + week.w, {
@@ -844,7 +868,12 @@
 
         if(logoId){
           // Place logo inside the center header block (E1:J1)
-          ws.addImage(logoId, { tl: { col: 6.0, row: 0.05 }, ext: { width: 140, height: 60 } });
+          // IMPORTANT: ExcelJS uses 0-based column/row anchors for images.
+          // Place logo centered within E1:J1.
+          ws.addImage(logoId, {
+            tl: { col: 4.6, row: 0.15 },
+            ext: { width: 180, height: 54 }
+          });
         }
       }
 
